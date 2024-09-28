@@ -5,12 +5,12 @@
  * @returns {Object} - レスポンス
  */
 function postSlack(url, payload) {
-  var token = SlackBotUserOAuthToken; // Bot User OAuth Tokenを設定
-  var options = {
+  const token = SlackBotUserOAuthToken; // Bot User OAuth Tokenを設定
+  const options = {
     method: "post",
     contentType: "application/json; charset=utf-8", // charsetを追加
     headers: {
-      Authorization: "Bearer " + token,
+      Authorization: `Bearer ${token}`,
     },
     payload: JSON.stringify(payload),
   };
@@ -35,8 +35,8 @@ function postSlack(url, payload) {
  * @returns {Object} - レスポンス
  */
 function getSlack(url, payload) {
-  var token = SlackBotUserOAuthToken; // Bot User OAuth Tokenを設定
-  var options = {
+  const token = SlackBotUserOAuthToken; // Bot User OAuth Tokenを設定
+  const options = {
     method: "get",
     contentType: "application/x-www-form-urlencoded",
     payload: {
@@ -45,7 +45,7 @@ function getSlack(url, payload) {
     },
   };
   try {
-    var response = UrlFetchApp.fetch(url, options);
+    const response = UrlFetchApp.fetch(url, options);
     logInfo({
       url: url,
       options: options,

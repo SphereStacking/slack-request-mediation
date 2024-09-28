@@ -83,7 +83,7 @@ function makeNewRequestBlocks({ title, dueDate, priority, assignees }) {
         type: "section",
         text: {
           type: "mrkdwn",
-          text: "*依頼先:*\n" + assignees,
+          text: `*依頼先:*\n${assignees}`,
         },
       },
       {
@@ -91,11 +91,11 @@ function makeNewRequestBlocks({ title, dueDate, priority, assignees }) {
         fields: [
           {
             type: "mrkdwn",
-            text: "*期限:*\n" + dueDate,
+            text: `*期限:*\n${dueDate}`,
           },
           {
             type: "mrkdwn",
-            text: "*優先度:*\n" + priority,
+            text: `*優先度:*\n${priority}`,
           },
         ],
       },
@@ -159,62 +159,60 @@ function makeTaskListBlocks(tasks) {
   ];
 
   // タスクをループしてブロックを追加
-  tasks.forEach(
-    /** @param {Task} task */ (task) => {
-      blocks.push(
-        {
-          type: "section",
-          fields: [
-            {
-              type: "mrkdwn",
-              text: `*管理ID*　　:　${task.id}\n*サマリー*　:　${task.summary}`,
-            },
-          ],
-        },
-        {
-          type: "section",
-          fields: [
-            {
-              type: "mrkdwn",
-              text: `*詳細*　　:　\n${task.detail}`,
-            },
-          ],
-        },
-      );
-      blocks.push({
+  for (const task of tasks) {
+    blocks.push(
+      {
         type: "section",
         fields: [
           {
             type: "mrkdwn",
-            text: `*依頼者*　:　${task.requester}`,
-          },
-          {
-            type: "mrkdwn",
-            text: "  " + task.status_emoji,
-          },
-          {
-            type: "mrkdwn",
-            text: `*担当者*　:　${task.assignee}`,
-          },
-          {
-            type: "mrkdwn",
-            text: `*状態*　　:　${task.status}`,
-          },
-          {
-            type: "mrkdwn",
-            text: `*期限*　　:　${task.due_date} (${task.time_left})`,
-          },
-          {
-            type: "mrkdwn",
-            text: `*優先度*　:　${task.priority}`,
+            text: `*管理ID*　　:　${task.id}\n*サマリー*　:　${task.summary}`,
           },
         ],
-      });
-      blocks.push({
-        type: "divider",
-      });
-    },
-  );
+      },
+      {
+        type: "section",
+        fields: [
+          {
+            type: "mrkdwn",
+            text: `*詳細*　　:　\n${task.detail}`,
+          },
+        ],
+      },
+    );
+    blocks.push({
+      type: "section",
+      fields: [
+        {
+          type: "mrkdwn",
+          text: `*依頼者*　:　${task.requester}`,
+        },
+        {
+          type: "mrkdwn",
+          text: ` ${task.status_emoji}`,
+        },
+        {
+          type: "mrkdwn",
+          text: `*担当者*　:　${task.assignee}`,
+        },
+        {
+          type: "mrkdwn",
+          text: `*状態*　　:　${task.status}`,
+        },
+        {
+          type: "mrkdwn",
+          text: `*期限*　　:　${task.due_date} (${task.time_left})`,
+        },
+        {
+          type: "mrkdwn",
+          text: `*優先度*　:　${task.priority}`,
+        },
+      ],
+    });
+    blocks.push({
+      type: "divider",
+    });
+  }
 
   return { blocks: blocks };
 }
@@ -236,7 +234,7 @@ function makeAppHomeBlocks(user_id, assignTasks, requestTasks) {
         type: "button",
         text: {
           type: "plain_text",
-          text: `Homeを更新`,
+          text: "Homeを更新",
           emoji: true,
         },
         value: "click_me_123",
@@ -387,7 +385,7 @@ function makeTaskDetailBlock({
       type: "header",
       text: {
         type: "plain_text",
-        text: `依頼詳細`,
+        text: "依頼詳細",
         emoji: true,
       },
     },

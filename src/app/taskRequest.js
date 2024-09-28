@@ -107,18 +107,18 @@ function postRemindTask() {
   );
   // ユーザーごとにタスクをグルーピング
   const groupedTasks = tasks.reduce((acc, task) => {
-    task.assignee.forEach((user) => {
+    for (const user of task.assignee) {
       if (!acc[user]) {
         acc[user] = [];
       }
       acc[user].push(task);
-    });
+    }
     return acc;
   }, {});
   // アサインされているタスクをUserに通知
-  Object.keys(groupedTasks).forEach((user) => {
+  for (const user of Object.keys(groupedTasks)) {
     postDirectMessage(user, makeTaskListBlocks(groupedTasks[user]));
-  });
+  }
 }
 
 /**

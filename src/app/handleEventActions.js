@@ -4,14 +4,14 @@
  */
 function handleEventActions(payload) {
   const actionType = payload.type;
-  logInfo("handleOtherActions start:" + actionType);
+  logInfo(`handleOtherActions start: ${actionType}`);
 
   switch (actionType) {
     case EVENT_ACTION_ID.APP_HOME_OPENED:
       getHomeTab(payload);
       break;
   }
-  logInfo("handleOtherActions end:" + actionType);
+  logInfo(`handleOtherActions end: ${actionType}`);
 }
 
 /**

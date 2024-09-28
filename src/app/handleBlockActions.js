@@ -4,7 +4,7 @@
  */
 function handleButtonActions(payload) {
   const actionId = payload.actions[0].action_id;
-  logInfo("handleButtonActions:" + actionId);
+  logInfo(`handleButtonActions: ${actionId}`);
   switch (actionId) {
     case BLOCK_ACTION_ID.HOME_SYNC:
       logInfo(BLOCK_ACTION_ID.HOME_SYNC);
@@ -112,9 +112,9 @@ function taskActioned(payload, task_id) {
     requester: task[0].requester,
     slack_url: task[0].slack_url,
   });
-  task[0].assignee.forEach((assignee) => {
+  for (const assignee of task[0].assignee) {
     postDirectMessage(assignee, { blocks: blocks });
-  });
+  }
   postDirectMessage(user_id, { text: "アクションを通知しました。" });
 }
 
@@ -139,9 +139,9 @@ function taskRemind(payload, task_id) {
     requester: task[0].requester,
     slack_url: task[0].slack_url,
   });
-  task[0].assignee.forEach((assignee) => {
+  for (const assignee of task[0].assignee) {
     postDirectMessage(assignee, { blocks: blocks });
-  });
+  }
   postDirectMessage(user_id, { text: "リマインドを通知しました。" });
 }
 

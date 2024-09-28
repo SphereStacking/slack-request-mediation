@@ -39,7 +39,7 @@ function logToSheet(logData, logLevel = LogLevel.INFO, stackDepth = 3) {
     sheet.getRange(lastRow + 1, 4).setValue(stackInfo.fileName);
     sheet.getRange(lastRow + 1, 5).setValue(stackInfo.lineNumber);
   } catch (e) {
-    Logger.log("ログの書き込みに失敗しました: " + e.message);
+    Logger.log(`ログの書き込みに失敗しました: ${e.message}`);
   }
 }
 
@@ -60,8 +60,8 @@ function shouldLog(logLevel, currentLogLevel) {
 function getCurrentDateSheetName() {
   const now = new Date();
   const year = now.getFullYear();
-  const month = ("0" + (now.getMonth() + 1)).slice(-2); // 月は0始まりなので1足す
-  const day = ("0" + now.getDate()).slice(-2);
+  const month = `0${now.getMonth() + 1}`.slice(-2); // 月は0始まりなので1足す
+  const day = `0${now.getDate()}`.slice(-2);
   return `${year}-${month}-${day}`;
 }
 

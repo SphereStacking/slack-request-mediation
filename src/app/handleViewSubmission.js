@@ -1,6 +1,6 @@
 function handleViewSubmission(payload) {
   const actionId = payload.view.callback_id;
-  logInfo("handleViewSubmission:" + actionId);
+  logInfo(`handleViewSubmission: ${actionId}`);
   switch (actionId) {
     case VIEW_SUBMISSION_ACTION_ID.TASK_ADD:
       addTask(payload);

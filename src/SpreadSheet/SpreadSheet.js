@@ -25,17 +25,18 @@ function getFilteredDataWithQuery({
   skipRows = 0,
   selectColumns = ["*"],
 }) {
-  var sheet = SpreadsheetApp.openById(spreadsheetId).getSheetByName(sheetName);
+  const sheet =
+    SpreadsheetApp.openById(spreadsheetId).getSheetByName(sheetName);
 
   // UUIDを生成して一時的なシート名に使用
-  var uuid = Utilities.getUuid();
-  var tempSheet = SpreadsheetApp.openById(spreadsheetId).insertSheet(uuid);
+  const uuid = Utilities.getUuid();
+  const tempSheet = SpreadsheetApp.openById(spreadsheetId).insertSheet(uuid);
 
   // フィルター条件をQUERY関数の形式に変換
-  var query = `SELECT ${selectColumns.join(", ")} WHERE `;
-  var conditions = filters.map((filterObj, index) => {
-    var operator = filterObj.operator || "=";
-    var value = filterObj.value;
+  let query = `SELECT ${selectColumns.join(", ")} WHERE `;
+  const conditions = filters.map((filterObj, index) => {
+    const operator = filterObj.operator || "=";
+    let value = filterObj.value;
 
     // 部分一致の場合、LIKE演算子を使用
     if (operator.toLowerCase() === "like") {
@@ -44,31 +45,31 @@ function getFilteredDataWithQuery({
       value = `'${value}'`;
     }
 
-    var condition = ` ${filterObj.column} ${operator} ${value} `;
+    let condition = ` ${filterObj.column} ${operator} ${value} `;
     if (index > 0) {
-      condition = ` ${filterObj.connector || "AND"} ` + condition;
+      condition = ` ${filterObj.connector || "AND"} ${condition}`;
     }
     return condition;
   });
   query += conditions.join("");
 
   // スキップする行数を考慮してQUERY関数を適用
-  var startRow = skipRows + 1;
-  var queryRange = sheet.getRange(
+  const startRow = skipRows + 1;
+  const queryRange = sheet.getRange(
     startRow,
     1,
     sheet.getLastRow() - skipRows,
     sheet.getLastColumn(),
   );
-  var queryString = `=QUERY(${sheetName}!${queryRange.getA1Notation()},"${query}",0)`;
+  const queryString = `=QUERY(${sheetName}!${queryRange.getA1Notation()},"${query}",0)`;
 
   // 一時的なシートにQUERY関数を設定
-  var resultRange = tempSheet.getRange(1, 1);
+  const resultRange = tempSheet.getRange(1, 1);
   resultRange.setFormula(queryString);
   SpreadsheetApp.flush(); // フォーミュラの計算を強制的に実行
 
   // フィルタリングされたデータを取得
-  var filteredData = resultRange.getDataRegion().getValues();
+  const filteredData = resultRange.getDataRegion().getValues();
 
   Logger.log(filteredData); // フィルタリングされたデータをログに出力
 

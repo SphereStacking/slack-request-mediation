@@ -8,10 +8,10 @@ function extractValuesFromState(state) {
   const result = {};
 
   for (const blockId in values) {
-    if (values.hasOwnProperty(blockId)) {
+    if (Object.prototype.hasOwnProperty.call(values, blockId)) {
       const block = values[blockId];
       for (const actionId in block) {
-        if (block.hasOwnProperty(actionId)) {
+        if (Object.prototype.hasOwnProperty.call(block, actionId)) {
           const action = block[actionId];
           if (
             action.type === "plain_text_input" ||
