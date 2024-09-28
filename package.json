@@ -1,15 +1,17 @@
 {
-    "scripts": {
-        "watch": "clasp push --watch",
-        "pull": "clasp pull",
-        "push": "clasp push",
-        "open": "clasp open",
-        "login": "./scripts/login.sh",
-        "deploy": "./scripts/deploy.sh"
-    },
-    "devDependencies": {
-        "@biomejs/biome": "1.9.2",
-        "@google/clasp": "^2.4.2",
-        "@types/google-apps-script": "^1.0.83"
-    }
+  "scripts": {
+    "watch": "clasp push --watch",
+    "pull": "clasp pull",
+    "push": "clasp push",
+    "open": "clasp open",
+    "login": "./scripts/login.sh",
+    "deploy": "./scripts/deploy.sh",
+    "lint": "biome check --write ./src",
+    "format": "biome format --write ./src"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.2",
+    "@google/clasp": "^2.4.2",
+    "@types/google-apps-script": "^1.0.83"
+  }
 }

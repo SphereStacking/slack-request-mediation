@@ -4,5 +4,5 @@
  * @returns {bool} - 初回接続の場合 true
  */
 function isSlackInitConect(type) {
-  return type === "url_verification"
+  return type === "url_verification";
 }

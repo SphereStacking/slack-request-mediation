@@ -13,14 +13,18 @@ function extractValuesFromState(state) {
       for (const actionId in block) {
         if (block.hasOwnProperty(actionId)) {
           const action = block[actionId];
-          if (action.type === 'plain_text_input' || action.type === 'number_input') {
+          if (
+            action.type === "plain_text_input" ||
+            action.type === "number_input"
+          ) {
             result[blockId] = action.value;
-          } else if (action.type === 'rich_text_input') {
-            result[blockId] = action.rich_text_value.elements[0].elements[0].text;
-          } else if (action.type === 'multi_users_select') {
+          } else if (action.type === "rich_text_input") {
+            result[blockId] =
+              action.rich_text_value.elements[0].elements[0].text;
+          } else if (action.type === "multi_users_select") {
             result[blockId] = action.selected_users;
-          } else if (action.type === 'datepicker') {
-            result[blockId] = action.selected_date || '未設定';
+          } else if (action.type === "datepicker") {
+            result[blockId] = action.selected_date || "未設定";
           }
         }
       }
@@ -29,5 +33,3 @@ function extractValuesFromState(state) {
 
   return result;
 }
-
-

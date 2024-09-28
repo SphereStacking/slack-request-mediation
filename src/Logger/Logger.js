@@ -19,7 +19,13 @@ function logToSheet(logData, logLevel = LogLevel.INFO, stackDepth = 3) {
 
     if (!sheet) {
       sheet = spreadsheet.insertSheet(sheetName);
-      sheet.appendRow(["日時", "ログレベル", "メッセージ", "ファイル名", "行数"]);
+      sheet.appendRow([
+        "日時",
+        "ログレベル",
+        "メッセージ",
+        "ファイル名",
+        "行数",
+      ]);
     }
 
     const stackInfo = getStackInfo(stackDepth);
@@ -32,12 +38,10 @@ function logToSheet(logData, logLevel = LogLevel.INFO, stackDepth = 3) {
     sheet.getRange(lastRow + 1, 3).setValue(logText);
     sheet.getRange(lastRow + 1, 4).setValue(stackInfo.fileName);
     sheet.getRange(lastRow + 1, 5).setValue(stackInfo.lineNumber);
-
   } catch (e) {
-    Logger.log('ログの書き込みに失敗しました: ' + e.message);
+    Logger.log("ログの書き込みに失敗しました: " + e.message);
   }
 }
-
 
 /**
  * 指定されたログレベルが現在のログレベルより高いかどうかをチェックする
@@ -56,8 +60,8 @@ function shouldLog(logLevel, currentLogLevel) {
 function getCurrentDateSheetName() {
   const now = new Date();
   const year = now.getFullYear();
-  const month = ('0' + (now.getMonth() + 1)).slice(-2); // 月は0始まりなので1足す
-  const day = ('0' + now.getDate()).slice(-2);
+  const month = ("0" + (now.getMonth() + 1)).slice(-2); // 月は0始まりなので1足す
+  const day = ("0" + now.getDate()).slice(-2);
   return `${year}-${month}-${day}`;
 }
 
@@ -70,9 +74,9 @@ function getStackInfo(depth = 3) {
   const err = new Error();
   const stack = err.stack.split("\n")[depth] || "";
   const match = stack.match(/(.*):(\d+):\d+/);
-  
+
   if (match) {
-    const fileName = match[1].split('/').pop(); // ファイル名のみを取得
+    const fileName = match[1].split("/").pop(); // ファイル名のみを取得
     const lineNumber = match[2];
     return { fileName, lineNumber };
   }
@@ -106,7 +110,7 @@ const logError = (message) => {
 };
 
 // シングルトンパターンでスプレッドシートオブジェクトを管理
-const SpreadsheetSingleton = (function() {
+const SpreadsheetSingleton = (() => {
   let instance;
 
   function createInstance() {
@@ -114,11 +118,11 @@ const SpreadsheetSingleton = (function() {
   }
 
   return {
-    getInstance: function() {
+    getInstance: () => {
       if (!instance) {
         instance = createInstance();
       }
       return instance;
-    }
+    },
   };
 })();
