@@ -8,6 +8,7 @@
         "deploy": "./scripts/deploy.sh"
     },
     "devDependencies": {
+        "@biomejs/biome": "1.9.2",
         "@google/clasp": "^2.4.2",
         "@types/google-apps-script": "^1.0.83"
     }
