@@ -1,8 +1,24 @@
-function getTask(task_id) {
+import { TASK_SPREAD_SHEET_COLUMNS, TASK_STATUS } from "@/config";
+import { scriptProperties } from "@/ScriptProperties";
+import { postDirectMessage } from "@/Slack";
+import { makeTaskListBlocks } from "@/app/SlackBlocks";
+import {
+  getSpreadSheet,
+  getLastRow,
+  addRow,
+  getFilteredDataWithQuery,
+} from "@/SpreadSheet";
+
+/**
+ * タスクを取得する
+ * @param {string} task_id - タスクID
+ * @returns {Array} タスク
+ */
+export function getTask(task_id: string): any[] {
   return formatTaskRows(
     getFilteredDataWithQuery({
-      spreadsheetId: TaskSpreadSheetId,
-      sheetName: TaskSheetName,
+      spreadsheetId: scriptProperties.TASK_SPREADSHEET_ID,
+      sheetName: scriptProperties.TASK_SHEET_NAME,
       filters: [
         {
           column: TASK_SPREAD_SHEET_COLUMNS.ID.column,
@@ -22,11 +38,11 @@ function getTask(task_id) {
  * @param {string} user_id - ユーザーID
  * @returns {Array} タスクの割り当て
  */
-function getAssigningTask(user_id) {
+export function getAssigningTask(user_id: string): any[] {
   return formatTaskRows(
     getFilteredDataWithQuery({
-      spreadsheetId: TaskSpreadSheetId,
-      sheetName: TaskSheetName,
+      spreadsheetId: scriptProperties.TASK_SPREADSHEET_ID,
+      sheetName: scriptProperties.TASK_SHEET_NAME,
       filters: [
         {
           column: TASK_SPREAD_SHEET_COLUMNS.STATUS.column,
@@ -52,11 +68,11 @@ function getAssigningTask(user_id) {
  * @param {string} user_id - ユーザーID
  * @returns {Array} 依頼されたタスク
  */
-function getRequestTask(user_id) {
+export function getRequestTask(user_id: string): any[] {
   return formatTaskRows(
     getFilteredDataWithQuery({
-      spreadsheetId: TaskSpreadSheetId,
-      sheetName: TaskSheetName,
+      spreadsheetId: scriptProperties.TASK_SPREADSHEET_ID,
+      sheetName: scriptProperties.TASK_SHEET_NAME,
       filters: [
         {
           column: TASK_SPREAD_SHEET_COLUMNS.STATUS.column,
@@ -82,16 +98,16 @@ function getRequestTask(user_id) {
  * @param {string} user_id - ユーザーID
  * @returns {Array} リマインドタスク
  */
-function postRemindTask() {
+export function postRemindTask(): void {
   const tasks = formatTaskRows(
     getFilteredDataWithQuery({
-      spreadsheetId: TaskSpreadSheetId,
-      sheetName: TaskSheetName,
+      spreadsheetId: scriptProperties.TASK_SPREADSHEET_ID,
+      sheetName: scriptProperties.TASK_SHEET_NAME,
       filters: [
         {
           column: TASK_SPREAD_SHEET_COLUMNS.ASSIGNEE.column,
           operator: "like",
-          value: DEBUG_USER_ID,
+          value: scriptProperties.DEBUG_USER_ID,
           connector: "AND",
         },
         {
@@ -106,7 +122,7 @@ function postRemindTask() {
     }),
   );
   // ユーザーごとにタスクをグルーピング
-  const groupedTasks = tasks.reduce((acc, task) => {
+  const groupedTasks = tasks.reduce((acc: Record<string, any[]>, task) => {
     for (const user of task.assignee) {
       if (!acc[user]) {
         acc[user] = [];
@@ -126,7 +142,7 @@ function postRemindTask() {
  * @param {Array} rows - タスクの行
  * @returns {Array} フォーマットされたタスクの行
  */
-function formatTaskRows(rows) {
+export function formatTaskRows(rows: any[]): any[] {
   return rows.map((row) => {
     return {
       id: row[TASK_SPREAD_SHEET_COLUMNS.ID.index],
@@ -134,7 +150,7 @@ function formatTaskRows(rows) {
       detail: row[TASK_SPREAD_SHEET_COLUMNS.DETAIL.index],
       assignee: row[TASK_SPREAD_SHEET_COLUMNS.ASSIGNEE.index]
         .split(",")
-        .map((item) => item.trim()),
+        .map((item: string) => item.trim()),
       status: row[TASK_SPREAD_SHEET_COLUMNS.STATUS.index],
       status_emoji:
         TASK_STATUS[row[TASK_SPREAD_SHEET_COLUMNS.STATUS.index].toUpperCase()]
@@ -157,8 +173,14 @@ function formatTaskRows(rows) {
  * タスクを追加する
  * @param {Object} task - タスク
  */
-function addRowRequestTask(task, requester_id) {
-  const sheet = getSpreadSheet(TaskSpreadSheetId, TaskSheetName);
+export function addRequestTask(
+  task: AddRequestTaskType,
+  requester_id: string,
+): void {
+  const sheet = getSpreadSheet(
+    scriptProperties.TASK_SPREADSHEET_ID,
+    scriptProperties.TASK_SHEET_NAME,
+  );
   const lastRow = getLastRow(sheet);
   addRow(sheet, [
     Utilities.getUuid(),
@@ -172,3 +194,13 @@ function addRowRequestTask(task, requester_id) {
     TASK_SPREAD_SHEET_COLUMNS.TIME_LEFT.setRow(lastRow + 1),
   ]);
 }
+
+export type AddRequestTaskType = {
+  summary: string;
+  detail: string;
+  assignee: string[];
+  due_date: string;
+  priority: string;
+  requester: string;
+  post_channel: string;
+};

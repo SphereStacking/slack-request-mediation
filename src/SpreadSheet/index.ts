@@ -1,3 +1,18 @@
+interface Filter {
+  column: string;
+  operator?: string;
+  value: string;
+  connector?: string;
+}
+
+interface QueryParams {
+  spreadsheetId: string;
+  sheetName: string;
+  filters?: Filter[];
+  skipRows?: number;
+  selectColumns?: string[];
+}
+
 /**
  * クエリを使用してフィルタリングされたデータを取得する
  * @param {string} spreadsheetId - スプレッドシートのID
@@ -18,16 +33,18 @@
  *   selectColumns:['A', 'B', 'E']
  * });
  */
-function getFilteredDataWithQuery({
+export function getFilteredDataWithQuery({
   spreadsheetId,
   sheetName,
   filters = [],
   skipRows = 0,
   selectColumns = ["*"],
-}) {
+}: QueryParams): any[][] {
   const sheet =
     SpreadsheetApp.openById(spreadsheetId).getSheetByName(sheetName);
-
+  if (!sheet) {
+    throw new Error("Sheet is null or undefined");
+  }
   // UUIDを生成して一時的なシート名に使用
   const uuid = Utilities.getUuid();
   const tempSheet = SpreadsheetApp.openById(spreadsheetId).insertSheet(uuid);
@@ -83,26 +100,37 @@ function getFilteredDataWithQuery({
  * スプレッドシートを取得する
  * @param {string} spreadsheetId - スプレッドシートのID
  * @param {string} sheetName - シート名
- * @returns {Sheet} スプレッドシート
+ * @returns {GoogleAppsScript.Spreadsheet.Sheet} スプレッドシート
  */
-function getSpreadSheet(spreadsheetId, sheetName) {
-  return SpreadsheetApp.openById(spreadsheetId).getSheetByName(sheetName);
+export function getSpreadSheet(
+  spreadsheetId: string,
+  sheetName: string,
+): GoogleAppsScript.Spreadsheet.Sheet {
+  const sheet =
+    SpreadsheetApp.openById(spreadsheetId).getSheetByName(sheetName);
+  if (!sheet) {
+    throw new Error("Sheet is null or undefined");
+  }
+  return sheet;
 }
 
 /**
  * 最終行を取得する
- * @param {Sheet} sheet - スプレッドシート
+ * @param {GoogleAppsScript.Spreadsheet.Sheet} sheet - スプレッドシート
  * @returns {number} 最終行
  */
-function getLastRow(sheet) {
+export function getLastRow(sheet: GoogleAppsScript.Spreadsheet.Sheet): number {
   return sheet.getLastRow();
 }
 
 /**
  * 行を追加する
- * @param {Sheet} sheet - スプレッドシート
- * @param {Array} row - 追加する行
+ * @param {GoogleAppsScript.Spreadsheet.Sheet} sheet - スプレッドシート
+ * @param {string[]} row - 追加する行
  */
-function addRow(sheet, row) {
+export function addRow(
+  sheet: GoogleAppsScript.Spreadsheet.Sheet,
+  row: string[],
+): void {
   sheet.appendRow(row);
 }
