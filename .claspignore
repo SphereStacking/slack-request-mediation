@@ -1,9 +1,10 @@
 # ignore all files…
-**/**
+# routDirを変更しているためコメントアウト
+# **/** 
 
 # except the extensions…
 !appsscript.json
-!build/*.js
+!build/index.js
 
 # ignore even valid files if in…
 .git/**
