@@ -1,4 +1,4 @@
-import { BLOCK_ACTION_ID, SLACK_EMOJI } from "@/config";
+import { BLOCK_ACTION_ID, SLACK_EMOJI } from "@/app/AppConfig";
 import type { Task } from "./index";
 
 export function makeAppHomeBlocks(

@@ -1,4 +1,4 @@
-import { TASK_SPREAD_SHEET_COLUMNS, TASK_STATUS } from "@/config";
+import { TASK_SPREAD_SHEET_COLUMNS, TASK_STATUS } from "@/app/AppConfig";
 import { scriptProperties } from "@/ScriptProperties";
 import { postDirectMessage } from "@/Slack";
 import { makeTaskListBlocks } from "@/app/SlackBlocks";
@@ -183,15 +183,17 @@ export function addRequestTask(
   );
   const lastRow = getLastRow(sheet);
   addRow(sheet, [
-    Utilities.getUuid(),
-    task.summary,
-    task.detail,
-    task.assignee.join(","),
-    TASK_STATUS.IN_PROGRESS.header_name,
-    task.due_date,
-    task.priority,
-    requester_id,
-    TASK_SPREAD_SHEET_COLUMNS.TIME_LEFT.setRow(lastRow + 1),
+    TASK_SPREAD_SHEET_COLUMNS.ID.setFormatRow(Utilities.getUuid()),
+    TASK_SPREAD_SHEET_COLUMNS.SUMMARY.setFormatRow(task.summary),
+    TASK_SPREAD_SHEET_COLUMNS.DETAIL.setFormatRow(task.detail),
+    TASK_SPREAD_SHEET_COLUMNS.ASSIGNEE.setFormatRow(task.assignee.join(",")),
+    TASK_SPREAD_SHEET_COLUMNS.STATUS.setFormatRow(
+      TASK_STATUS.IN_PROGRESS.header_name,
+    ),
+    TASK_SPREAD_SHEET_COLUMNS.DUE_DATE.setFormatRow(task.due_date),
+    TASK_SPREAD_SHEET_COLUMNS.PRIORITY.setFormatRow(task.priority),
+    TASK_SPREAD_SHEET_COLUMNS.REQUESTER.setFormatRow(requester_id),
+    TASK_SPREAD_SHEET_COLUMNS.TIME_LEFT.setFormatRow((lastRow + 1).toString()),
   ]);
 }
 

@@ -28,28 +28,78 @@ interface TaskSpreadSheetColumn {
   title: string;
   index: number;
   column: string;
-  setRow?: (lastRow: number) => string;
+  setFormatRow: (value: string) => string;
 }
 
 export const TASK_SPREAD_SHEET_COLUMNS: Record<string, TaskSpreadSheetColumn> =
   {
-    ID: { title: "id", index: 0, column: "A" },
-    SUMMARY: { title: "summary", index: 1, column: "B" },
-    DETAIL: { title: "detail", index: 2, column: "C" },
-    ASSIGNEE: { title: "assignee", index: 3, column: "D" },
-    STATUS: { title: "status", index: 4, column: "E" },
-    DUE_DATE: { title: "due_date", index: 5, column: "F" },
-    PRIORITY: { title: "priority", index: 6, column: "G" },
-    REQUESTER: { title: "requester", index: 7, column: "H" },
+    ID: {
+      title: "id",
+      index: 0,
+      column: "A",
+      setFormatRow: (value: string): string => value,
+    },
+    SUMMARY: {
+      title: "summary",
+      index: 1,
+      column: "B",
+      setFormatRow: (value: string): string => value,
+    },
+    DETAIL: {
+      title: "detail",
+      index: 2,
+      column: "C",
+      setFormatRow: (value: string): string => value,
+    },
+    ASSIGNEE: {
+      title: "assignee",
+      index: 3,
+      column: "D",
+      setFormatRow: (value: string): string => value,
+    },
+    STATUS: {
+      title: "status",
+      index: 4,
+      column: "E",
+      setFormatRow: (value: string): string => value,
+    },
+    DUE_DATE: {
+      title: "due_date",
+      index: 5,
+      column: "F",
+      setFormatRow: (value: string): string => value,
+    },
+    PRIORITY: {
+      title: "priority",
+      index: 6,
+      column: "G",
+      setFormatRow: (value: string): string => value,
+    },
+    REQUESTER: {
+      title: "requester",
+      index: 7,
+      column: "H",
+      setFormatRow: (value: string): string => value,
+    },
     TIME_LEFT: {
       title: "time_left",
       index: 8,
       column: "I",
-      setRow: (lastRow: number): string =>
-        `=IF(F${lastRow}-TODAY()>1, F${lastRow}-TODAY() & "日", INT((F${lastRow}-NOW())*24) & "時間")`,
+      setFormatRow: (value: string): string =>
+        `=IF(F${value}-TODAY()>1, F${value}-TODAY() & "日", INT((F${value}-NOW())*24) & "時間")`,
     },
-    POST_CHANNEL: { title: "post_channel", index: 9, column: "J" },
-    SLACK_MESSAGE_URL: { title: "slack_message_url", index: 10, column: "K" },
+    POST_CHANNEL: {
+      title: "post_channel",
+      index: 9,
+      column: "J",
+      setFormatRow: (value: string): string => value,
+    },
+    SLACK_MESSAGE_URL: {
+      title: "slack_message_url",
+      index: 10,
+      column: "K",
+      setFormatRow: (value: string): string => value,
+    },
   };
 
 //イベントアクションID (slackのイベント名)

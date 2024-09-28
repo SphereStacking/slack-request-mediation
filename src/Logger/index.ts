@@ -1,4 +1,4 @@
-import { CURRENT_LOG_LEVEL } from "@/config";
+import { CURRENT_LOG_LEVEL } from "@/app/AppConfig";
 import { scriptProperties } from "@/ScriptProperties";
 
 /* ログレベルの定義と階層のまとめ */

@@ -4,7 +4,7 @@ import {
   VIEW_SUBMISSION_ACTION_ID,
   BLOCK_ACTION_ID,
   SLACK_PAYLOAD_TYPE,
-} from "@/config";
+} from "@/app/AppConfig";
 import {
   getHomeTab,
   addTask,

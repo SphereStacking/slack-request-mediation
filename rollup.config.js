@@ -1,7 +1,10 @@
+import path from "node:path";
 import alias from "@rollup/plugin-alias";
 import { babel } from "@rollup/plugin-babel";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
+
+const __dirname = path.resolve();
 
 const extensions = [".ts", ".js"];
 
@@ -26,17 +29,7 @@ export default {
   },
   plugins: [
     alias({
-      entries: [
-        { find: "@", replacement: "./src" },
-        {
-          find: "@/config",
-          replacement: "./src/config",
-        },
-        {
-          find: "@/Logger",
-          replacement: "./src/Logger",
-        },
-      ],
+      entries: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
     }),
     preventThreeShakingPlugin(),
     nodeResolve({

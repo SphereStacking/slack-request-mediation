@@ -10,23 +10,30 @@ export function extractValuesFromState(
       for (const actionId in block) {
         if (Object.prototype.hasOwnProperty.call(block, actionId)) {
           const action = block[actionId];
-          if (action.type === "plain_text_input") {
-            result[blockId] = handlePlainTextInput(action);
-          } else if (action.type === "number_input") {
-            result[blockId] = handleNumberInput(action);
-          } else if (action.type === "rich_text_input") {
-            result[blockId] = handleRichTextInput(action);
-          } else if (action.type === "multi_users_select") {
-            result[blockId] = handleMultiUsersSelect(action);
-          } else if (action.type === "datepicker") {
-            result[blockId] = handleDatepicker(action);
-          }
+          result[blockId] = handleAction(action);
         }
       }
     }
   }
 
   return result;
+}
+
+function handleAction(action: SlackAction): any {
+  switch (action.type) {
+    case "plain_text_input":
+      return handlePlainTextInput(action);
+    case "number_input":
+      return handleNumberInput(action);
+    case "rich_text_input":
+      return handleRichTextInput(action);
+    case "multi_users_select":
+      return handleMultiUsersSelect(action);
+    case "datepicker":
+      return handleDatepicker(action);
+    default:
+      return null;
+  }
 }
 
 function handlePlainTextInput(action: SlackAction): PlainTextInput {
@@ -50,10 +57,10 @@ function handleRichTextInput(action: SlackAction): RichTextInput {
   };
 }
 
-function handleMultiUsersSelect(action: SlackAction): SlackAction {
+function handleMultiUsersSelect(action: SlackAction): MultiUsersSelect {
   return {
     type: "multi_users_select",
-    value: action.selected_users?.join(",") || "",
+    value: action.selected_users ?? [],
   };
 }
 
@@ -73,7 +80,7 @@ interface SlackAction {
 }
 
 interface Block {
-  [actionId: string]: Action;
+  [actionId: string]: SlackAction;
 }
 
 interface Values {
@@ -83,6 +90,7 @@ interface Values {
 interface State {
   values: Values;
 }
+
 type PlainTextInput = {
   type: "plain_text_input";
   value: string;
