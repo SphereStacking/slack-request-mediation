@@ -1,0 +1,13 @@
+{
+    "scripts": {
+        "watch": "clasp push --watch",
+        "pull": "clasp pull",
+        "push": "clasp push",
+        "open": "clasp open",
+        "login": "./scripts/login.sh",
+        "deploy": "./scripts/deploy.sh"
+    },
+    "devDependencies": {
+        "@google/clasp": "^2.4.2"
+    }
+}
