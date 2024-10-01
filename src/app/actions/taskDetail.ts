@@ -1,5 +1,5 @@
 import { logInfo } from "@/Logger";
-import { getTask } from "@/app/domain/taskRequest";
+import { getTask } from "@/app/taskRequest";
 import { makeTaskDetailBlock } from "@/app/SlackBlocks";
 import { postDirectMessage } from "@/Slack/api";
 
@@ -8,7 +8,7 @@ import { postDirectMessage } from "@/Slack/api";
  * @param {any} payload - ペイロード
  * @param {string} task_id - タスクID
  */
-export function taskDetail(payload: any): void {
+export function taskDetail(payload: any): GoogleAppsScript.Content.TextOutput {
   const values = JSON.parse(payload.actions[0].selected_option.value);
   const task_id = values.task_id;
   const task = getTask(task_id);
@@ -27,4 +27,5 @@ export function taskDetail(payload: any): void {
   });
   logInfo("hoge");
   postDirectMessage(user_id, { blocks: blocks });
+  return ContentService.createTextOutput("hoge");
 }

@@ -1,15 +1,15 @@
 import { logInfo } from "@/Logger";
-import { getTask } from "@/app/domain/taskRequest";
+import { getTask } from "@/app/taskRequest";
 import { makeTaskDetailBlock } from "@/app/SlackBlocks";
 import { postDirectMessage } from "@/Slack/api";
 
 /**
- * タスクリマインドを実行する
+ * タスクアクションを実行する
  * @param {any} payload - ペイロード
  * @param {string} task_id - タスクID
  */
-export function taskRemind(payload: any): void {
-  logInfo("taskRemind");
+export function taskActioned(payload: any): GoogleAppsScript.Content.TextOutput {
+  logInfo("taskActioned");
   const values = JSON.parse(payload.actions[0].selected_option.value);
   const task_id = values.task_id;
   const task = getTask(task_id);
@@ -29,5 +29,6 @@ export function taskRemind(payload: any): void {
   for (const assignee of task[0].assignee) {
     postDirectMessage(assignee, { blocks: blocks });
   }
-  postDirectMessage(user_id, { text: "リマインドを通知しました。" });
+  postDirectMessage(user_id, { text: "アクションを通知しました。" });
+  return ContentService.createTextOutput("hoge");
 }

@@ -1,4 +1,4 @@
-import { getAssigningTask, getRequestTask } from "@/app/domain/taskRequest";
+import { getAssigningTask, getRequestTask } from "@/app/taskRequest";
 import { makeAppHomeBlocks } from "@/app/SlackBlocks";
 import { postAppHome } from "@/Slack/api";
 
@@ -12,5 +12,5 @@ export function updateHome(payload: any): GoogleAppsScript.Content.TextOutput {
   const requestTasks = getRequestTask(user_id);
   const blocks = makeAppHomeBlocks(user_id, assignTasks, requestTasks);
   postAppHome(user_id, blocks);
-  return ContentService.createTextOutput();
+  return ContentService.createTextOutput("hoge");
 }

@@ -8,6 +8,8 @@ class ScriptProperties {
   private _TASK_SHEET_NAME: string | null = null;
   private _DEBUG_USER_ID: string | null = null;
   private _DEBUG_CHANNEL_ID: string | null = null;
+  private _CURRENT_LOG_LEVEL: string | null = null;
+  private _SLACK_VERIFICATION_TOKEN: string | null = null;
 
   private constructor() {}
 
@@ -20,24 +22,21 @@ class ScriptProperties {
 
   get SLACK_BOT_USER_OAUTH_TOKEN(): string {
     if (this._SLACK_BOT_USER_OAUTH_TOKEN === null) {
-      this._SLACK_BOT_USER_OAUTH_TOKEN =
-        this.props.getProperty("SlackBotUserOAuthToken") || "";
+      this._SLACK_BOT_USER_OAUTH_TOKEN = this.props.getProperty("SlackBotUserOAuthToken") || "";
     }
     return this._SLACK_BOT_USER_OAUTH_TOKEN;
   }
 
   get LOGGER_SPREADSHEET_APP_ID(): string {
     if (this._LOGGER_SPREADSHEET_APP_ID === null) {
-      this._LOGGER_SPREADSHEET_APP_ID =
-        this.props.getProperty("LoggerSpreadsheetAppID") || "";
+      this._LOGGER_SPREADSHEET_APP_ID = this.props.getProperty("LoggerSpreadsheetAppID") || "";
     }
     return this._LOGGER_SPREADSHEET_APP_ID;
   }
 
   get TASK_SPREADSHEET_ID(): string {
     if (this._TASK_SPREADSHEET_ID === null) {
-      this._TASK_SPREADSHEET_ID =
-        this.props.getProperty("TaskSpreadSheetId") || "";
+      this._TASK_SPREADSHEET_ID = this.props.getProperty("TaskSpreadSheetId") || "";
     }
     return this._TASK_SPREADSHEET_ID;
   }
@@ -61,6 +60,20 @@ class ScriptProperties {
       this._DEBUG_CHANNEL_ID = this.props.getProperty("DEBUG_CHANNEL_ID") || "";
     }
     return this._DEBUG_CHANNEL_ID;
+  }
+
+  get CURRENT_LOG_LEVEL(): string {
+    if (this._CURRENT_LOG_LEVEL === null) {
+      this._CURRENT_LOG_LEVEL = this.props.getProperty("CURRENT_LOG_LEVEL") || "";
+    }
+    return this._CURRENT_LOG_LEVEL;
+  }
+
+  get SLACK_VERIFICATION_TOKEN(): string {
+    if (this._SLACK_VERIFICATION_TOKEN === null) {
+      this._SLACK_VERIFICATION_TOKEN = this.props.getProperty("SLACK_VERIFICATION_TOKEN") || "";
+    }
+    return this._SLACK_VERIFICATION_TOKEN;
   }
 }
 

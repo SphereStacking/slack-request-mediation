@@ -1,5 +1,5 @@
-import { getAssigningTask } from "@/app/domain/taskRequest";
-import { getRequestTask } from "@/app/domain/taskRequest";
+import { getAssigningTask } from "@/app/taskRequest";
+import { getRequestTask } from "@/app/taskRequest";
 import { makeAppHomeBlocks } from "@/app/SlackBlocks";
 import { postAppHome } from "@/Slack/api";
 

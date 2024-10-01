@@ -1,12 +1,14 @@
-/** 現在のログレベル */
-export const CURRENT_LOG_LEVEL = "DEBUG";
+import { scriptProperties } from "@/ScriptProperties";
 
-// タスクのステータス
+/** 現在のログレベル */
+export const CURRENT_LOG_LEVEL = scriptProperties.CURRENT_LOG_LEVEL;
+
 interface TaskStatus {
   header_name: string;
   emoji: string;
 }
 
+/** タスクのステータス */
 export const TASK_STATUS: Record<string, TaskStatus> = {
   DRAFT: { header_name: "draft", emoji: ":memo:" }, // メモ
   IN_PROGRESS: {
@@ -18,9 +20,10 @@ export const TASK_STATUS: Record<string, TaskStatus> = {
   CANCELLED: { header_name: "cancelled", emoji: ":x:" }, // バツ印
 };
 
+/** タスクの初期ステータス */
 export const TASK_DEFAULT_STATUS: string = TASK_STATUS.IN_PROGRESS.header_name;
 
-// タスクのスプレッドシートの列
+/** タスクのスプレッドシートの列 */
 interface TaskSpreadSheetColumn {
   title: string;
   index: number;
@@ -28,6 +31,7 @@ interface TaskSpreadSheetColumn {
   setFormatRow: (value: string) => string;
 }
 
+/** タスクのスプレッドシートの列 */
 export const TASK_SPREAD_SHEET_COLUMNS: Record<string, TaskSpreadSheetColumn> =
   {
     ID: {
@@ -99,17 +103,17 @@ export const TASK_SPREAD_SHEET_COLUMNS: Record<string, TaskSpreadSheetColumn> =
     },
   };
 
-//イベントアクションID (slackのイベント名)
+/** イベントアクションID (slackのイベント名) */
 export const EVENT_ACTION_ID: Record<string, string> = {
   APP_HOME_OPENED: "app_home_opened",
 };
 
-//ビューサブミッションアクションID (slackのビューサブミッション名)
+/** ビューサブミッションアクションID (slackのビューサブミッション名) */
 export const VIEW_SUBMISSION_ACTION_ID: Record<string, string> = {
   TASK_ADD: "task_add",
 };
 
-//ブロックアクションID (slackのブロックアクション名)
+/** ブロックアクションID (slackのブロックアクション名) */
 export const BLOCK_ACTION_ID: Record<string, string> = {
   HOME_SYNC: "home_sync",
   TASK_REGISTER_MODAL_OPEN: "task_register_modal_open",
@@ -122,6 +126,7 @@ export const BLOCK_ACTION_ID: Record<string, string> = {
   TASK_CLOSED: "closed",
 };
 
+/** スラックの絵文字 */
 export const SLACK_EMOJI: Record<string, string> = {
   LGTM: ":lgtm:",
   ACTIONED: ":speech_balloon:",
@@ -131,6 +136,7 @@ export const SLACK_EMOJI: Record<string, string> = {
   UNASSIGNED: ":no_entry_sign:",
 };
 
+/** スラックのペイロードタイプ */
 export const SLACK_PAYLOAD_TYPE: Record<string, string> = {
   URL_VERIFICATION: "url_verification",
   BLOCK_ACTIONS: "block_actions",

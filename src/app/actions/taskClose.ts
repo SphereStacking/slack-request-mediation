@@ -5,6 +5,7 @@ import { logInfo } from "@/Logger";
  * @param {any} payload - ペイロード
  * @param {string} task_id - タスクID
  */
-export function taskClose(payload: any): void {
+export function taskClose(payload: any): GoogleAppsScript.Content.TextOutput {
   logInfo("taskClose");
+  return ContentService.createTextOutput("hoge");
 }
