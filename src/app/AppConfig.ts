@@ -1,8 +1,5 @@
-import { LogLevel } from "@/Logger";
-import type { LogLevelType } from "@/Logger";
-
 /** 現在のログレベル */
-export const CURRENT_LOG_LEVEL: LogLevelType = LogLevel.DEBUG; // LogLevelから選択
+export const CURRENT_LOG_LEVEL = "DEBUG";
 
 // タスクのステータス
 interface TaskStatus {

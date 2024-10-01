@@ -21,7 +21,7 @@ export const LogLevel: Record<string, LogLevelType> = {
  * 配列やオブジェクトは、ログ記録前に自動的にJSON文字列に変換されます。
  *
  * @param {string | number | any[] | object} logData - ログとして記録するデータ。
- * @param {LogLevel} [logLevel=LogLevel.INFO] - LogLevelの定数から指定されるログのレベルオブジェクト。
+ * @param {LogLevelType} [logLevel=LogLevel.INFO] - LogLevelの定数から指定されるログのレベルオブジェクト。
  * @param {number} [stackDepth=3] - 呼び出し元スタックの深さ。デフォルトは3。
  * @throws {Error} 指定されたシートが見つからない場合にエラーをスローします。
  */
@@ -71,9 +71,9 @@ export function logToSheet(
  */
 export function shouldLog(
   logLevel: LogLevelType,
-  currentLogLevel: LogLevelType,
+  currentLogLevel: string,
 ): boolean {
-  return logLevel.value >= currentLogLevel.value;
+  return logLevel.value >= LogLevel[currentLogLevel].value ?? 0;
 }
 
 /**

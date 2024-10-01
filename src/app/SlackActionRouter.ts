@@ -17,42 +17,75 @@ import {
   taskLgtm,
   urlVerification,
 } from "@/app/controller";
-
-const actionRoutes: ActionRouter = {
-  [SLACK_PAYLOAD_TYPE.EVENT]: {
-    [EVENT_ACTION_ID.APP_HOME_OPENED]: getHomeTab,
+import { logInfo } from "@/Logger";
+/**
+ * アクションルーター
+ */
+const actionRoutes: {
+  key: string;
+  controller: (payload: any) => GoogleAppsScript.Content.TextOutput;
+}[] = [
+  {
+    key: `${SLACK_PAYLOAD_TYPE.URL_VERIFICATION}/${SLACK_PAYLOAD_TYPE.URL_VERIFICATION}`,
+    controller: (payload: any) => urlVerification(payload),
   },
-  [SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS]: {
-    [BLOCK_ACTION_ID.HOME_SYNC]: updateHome,
-    [BLOCK_ACTION_ID.TASK_REGISTER_MODAL_OPEN]: openTaskRegisterModal,
-    [BLOCK_ACTION_ID.ASSIGN_OVERFLOW_ACTION]: {
-      get: (payload: any) => payload.actions[0].selected_option.value,
-      routes: {
-        [BLOCK_ACTION_ID.TASK_DETAIL]: taskDetail,
-        [BLOCK_ACTION_ID.TASK_ACTIONED]: taskActioned,
-        [BLOCK_ACTION_ID.TASK_CLOSED]: taskClose,
-        [BLOCK_ACTION_ID.TASK_REMIND]: taskRemind,
-        [BLOCK_ACTION_ID.TASK_LGTM]: taskLgtm,
-      },
-    },
-    [BLOCK_ACTION_ID.REQUEST_OVERFLOW_ACTION]: {
-      get: (payload: any) => payload.actions[0].selected_option.value,
-      routes: {
-        [BLOCK_ACTION_ID.TASK_DETAIL]: taskDetail,
-        [BLOCK_ACTION_ID.TASK_ACTIONED]: taskActioned,
-        [BLOCK_ACTION_ID.TASK_CLOSED]: taskClose,
-        [BLOCK_ACTION_ID.TASK_REMIND]: taskRemind,
-        [BLOCK_ACTION_ID.TASK_LGTM]: taskLgtm,
-      },
-    },
+  {
+    key: `${SLACK_PAYLOAD_TYPE.EVENT}/${EVENT_ACTION_ID.APP_HOME_OPENED}`,
+    controller: (payload: any) => getHomeTab(payload),
   },
-  [SLACK_PAYLOAD_TYPE.VIEW_SUBMISSION]: {
-    [VIEW_SUBMISSION_ACTION_ID.TASK_ADD]: addTask,
+  {
+    key: `${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.HOME_SYNC}`,
+    controller: (payload: any) => updateHome(payload),
   },
-  [SLACK_PAYLOAD_TYPE.URL_VERIFICATION]: {
-    [SLACK_PAYLOAD_TYPE.URL_VERIFICATION]: urlVerification,
+  {
+    key: `${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.TASK_REGISTER_MODAL_OPEN}`,
+    controller: (payload: any) => openTaskRegisterModal(payload),
   },
-};
+  {
+    key: `${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.ASSIGN_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_DETAIL}`,
+    controller: (payload: any) => taskDetail(payload),
+  },
+  {
+    key: `${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.ASSIGN_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_ACTIONED}`,
+    controller: (payload: any) => taskActioned(payload),
+  },
+  {
+    key: `${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.ASSIGN_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_CLOSED}`,
+    controller: (payload: any) => taskClose(payload),
+  },
+  {
+    key: `${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.ASSIGN_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_REMIND}`,
+    controller: (payload: any) => taskRemind(payload),
+  },
+  {
+    key: `${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.ASSIGN_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_LGTM}`,
+    controller: (payload: any) => taskLgtm(payload),
+  },
+  {
+    key: `${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.REQUEST_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_DETAIL}`,
+    controller: (payload: any) => taskDetail(payload),
+  },
+  {
+    key: `${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.REQUEST_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_ACTIONED}`,
+    controller: (payload: any) => taskActioned(payload),
+  },
+  {
+    key: `${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.REQUEST_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_CLOSED}`,
+    controller: (payload: any) => taskClose(payload),
+  },
+  {
+    key: `${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.REQUEST_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_REMIND}`,
+    controller: (payload: any) => taskRemind(payload),
+  },
+  {
+    key: `${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.REQUEST_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_LGTM}`,
+    controller: (payload: any) => taskLgtm(payload),
+  },
+  {
+    key: `${SLACK_PAYLOAD_TYPE.VIEW_SUBMISSION}/${VIEW_SUBMISSION_ACTION_ID.TASK_ADD}`,
+    controller: (payload: any) => addTask(payload),
+  },
+];
 
 /**
  * スラックのPOSTリクエストを受け取る
@@ -61,26 +94,31 @@ const actionRoutes: ActionRouter = {
  */
 export function SlackPostRequest(
   e: GoogleAppsScript.Events.DoPost,
-): GoogleAppsScript.Content.TextOutput | void {
+): GoogleAppsScript.Content.TextOutput {
   try {
-    const postData = JSON.parse(e.postData.contents);
-    if (postData.type === SLACK_PAYLOAD_TYPE.URL_VERIFICATION) {
-      return ContentService.createTextOutput(postData.challenge);
-    }
-    routePayload(postData.type, postData);
+    logInfo("SlackPostRequest");
+    const postData = parsePostData(e.postData.contents);
+    logInfo(postData);
+    return routePayload(postData.type, postData);
   } catch (error) {
     // errorを握りつぶす。
   }
 
   try {
-    const payload = JSON.parse(decodeURIComponent(e.parameter.payload));
-    routePayload(payload.type, payload);
-    if (payload.type === SLACK_PAYLOAD_TYPE.VIEW_SUBMISSION) {
-      return ContentService.createTextOutput();
-    }
+    const payload = parsePayload(e.parameter.payload);
+    return routePayload(payload.type, payload);
   } catch (error: any) {
     logError(error);
+    return ContentService.createTextOutput(error.message);
   }
+}
+
+function parsePostData(contents: string): any {
+  return JSON.parse(contents);
+}
+
+function parsePayload(payload: string): any {
+  return JSON.parse(decodeURIComponent(payload));
 }
 
 /**
@@ -89,21 +127,23 @@ export function SlackPostRequest(
  * @param actionId
  * @param payload
  */
-function routeAction(type: string, actionId: string, payload: any) {
-  const controller = actionRoutes[type]?.[actionId];
-  if (typeof controller === "function") {
-    controller(payload);
-  } else if (
-    controller &&
-    typeof controller.get === "function" &&
-    controller.routes
-  ) {
-    const values = JSON.parse(controller.get(payload));
-    const nestedController = controller.routes[values.type];
-    if (nestedController) {
-      nestedController(payload);
-    }
+function routeAction(
+  type: string,
+  actionId: string,
+  payload: any,
+): GoogleAppsScript.Content.TextOutput {
+  logInfo("routeAction");
+  logInfo(actionRoutes);
+  logInfo({ type, actionId, payload });
+  const key = `${type}/${actionId}`;
+  const controller = actionRoutes.find((route) => route.key === key);
+  logInfo({ controller });
+
+  if (!controller) {
+    logError(`No controller found for type: ${type}, actionId: ${actionId}`);
+    return ContentService.createTextOutput("No controller found");
   }
+  return controller.controller(payload);
 }
 
 /**
@@ -111,21 +151,27 @@ function routeAction(type: string, actionId: string, payload: any) {
  * @param type
  * @param payload
  */
-function routePayload(type: string, payload: any): void {
-  const actionId =
-    type === SLACK_PAYLOAD_TYPE.EVENT
-      ? payload.type
-      : type === SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS
-        ? payload.actions[0].action_id
-        : payload.view.callback_id;
-  routeAction(type, actionId, payload);
+function routePayload(
+  type: string,
+  payload: any,
+): GoogleAppsScript.Content.TextOutput {
+  logInfo("routePayload");
+  logInfo(type);
+  logInfo(payload);
+  let actionId: string;
+  switch (type) {
+    case SLACK_PAYLOAD_TYPE.URL_VERIFICATION:
+      actionId = payload.type;
+      break;
+    case SLACK_PAYLOAD_TYPE.EVENT:
+      actionId = payload.type;
+      break;
+    case SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS:
+      actionId = payload.actions[0].action_id;
+      break;
+    default:
+      actionId = payload.view.callback_id;
+  }
+  logInfo(actionId);
+  return routeAction(type, actionId, payload);
 }
-
-/**
- * アクションルーター
- */
-type ActionRouter = {
-  [key: string]: {
-    [key: string]: any;
-  };
-};
