@@ -8,7 +8,7 @@
     "build": "rollup -c",
     "watch": "rollup -c -w && clasp push --watch",
     "pull": "clasp pull",
-    "push": "clasp push",
+    "push": "clasp push --force",
     "open": "clasp open",
     "login": "./scripts/login.sh",
     "deploy": "./scripts/deploy.sh",

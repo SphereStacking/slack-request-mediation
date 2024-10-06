@@ -1,42 +1,83 @@
 import { logInfo } from "@/Logger";
-import { extractValuesFromState } from "@/Slack/format";
-import { postChannelMessage, postDirectMessage, getPermalink } from "@/Slack/api";
+import { SlackPayloadParser } from "@/Slack/format";
+import {
+  postChannelMessage,
+  postDirectMessage,
+  getPermalink,
+  getConversationsMembers,
+  postJoinChannel,
+} from "@/Slack/api";
 import { makeNewTaskDetailBlock } from "@/app/SlackBlocks";
-import { addRequestTask, type AddRequestTaskType } from "@/app/taskRequest";
+import { addRequestTask } from "@/app/service/taskRequest";
+import type {
+  PlainTextInput,
+  NumberInput,
+  RichTextInput,
+  MultiUsersSelect,
+  Datepicker,
+  ChannelsSelect,
+} from "@/Slack/format";
+import { scriptProperties } from "@/ScriptProperties";
 
+type FormatTask = {
+  summary: PlainTextInput;
+  detail: RichTextInput;
+  assignee: MultiUsersSelect;
+  due_date: Datepicker;
+  priority: NumberInput;
+  post_channel: ChannelsSelect;
+};
 /**
  * 依頼を登録する
  * @param {any} payload - ペイロード
  */
 export function addTask(payload: any): GoogleAppsScript.Content.TextOutput {
-  const user_id = payload.user.id;
   logInfo("addTask");
-  const values = extractValuesFromState(payload.view.state);
-  const task: AddRequestTaskType = {
-    summary: typeof values.summary === "string" ? values.summary : values.summary[0],
-    detail: typeof values.detail === "string" ? values.detail : values.detail[0],
-    assignee: Array.isArray(values.assignee) ? values.assignee : [],
-    due_date: typeof values.due_date === "string" ? values.due_date : values.due_date[0],
-    priority: typeof values.priority === "string" ? values.priority : values.priority[0],
-    requester: typeof values.requester === "string" ? values.requester : values.requester[0],
-    post_channel: typeof values.post_channel === "string" ? values.post_channel : values.post_channel[0],
+  const user_id = payload.user.id;
+  const slackPayloadParser = new SlackPayloadParser(payload.view.state);
+
+  const task: FormatTask = {
+    summary: slackPayloadParser.getPlainTextInput("summary"),
+    detail: slackPayloadParser.getRichTextInput("detail"),
+    assignee: slackPayloadParser.getMultiUsersSelect("assignee"),
+    due_date: slackPayloadParser.getDatepicker("due_date"),
+    priority: slackPayloadParser.getNumberInput("priority"),
+    post_channel: slackPayloadParser.getChannelsSelect("post_channel"),
   };
+
+  // 投稿先のチャンネルにBotが参加していないとメッセージを投稿できないため必要に応じて追加させる。
+  const conversationsMembers = getConversationsMembers(task.post_channel.value);
+  const isMember = conversationsMembers.members.includes(scriptProperties.SLACK_BOT_USER_ID);
+  if (!isMember) {
+    postJoinChannel(task.post_channel.value);
+  }
+
   // 投稿先のチャンネル
-  const channelMessage = postChannelMessage(task.post_channel, {
+  const channelMessage = postChannelMessage(task.post_channel.value, {
     blocks: makeNewTaskDetailBlock({
-      summary: task.summary,
-      detail: task.detail,
-      assignee: task.assignee,
-      due_date: task.due_date,
-      priority: task.priority,
-      requester: task.requester,
+      summary: task.summary.value,
+      detail: task.detail.value,
+      assignee: task.assignee.value,
+      due_date: task.due_date.value,
+      priority: task.priority.value,
+      requester: user_id,
     }),
   });
+
   // 依頼元ユーザーに通知
   const response = getPermalink(channelMessage.channel, channelMessage.ts);
   postDirectMessage(user_id, {
     text: `依頼を完了しました。\n${JSON.stringify(task)} \n${response.permalink}`,
   });
-  addRequestTask(task, user_id);
+  addRequestTask({
+    summary: task.summary.value,
+    detail: task.detail.value,
+    assignee: task.assignee.value,
+    due_date: task.due_date.value,
+    priority: task.priority.value,
+    requester: user_id,
+    post_channel: task.post_channel.value,
+    slack_message_url: response.permalink,
+  });
   return ContentService.createTextOutput();
 }

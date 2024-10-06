@@ -124,9 +124,46 @@ export function postViewsOpen(trigger_id: string, payload: any) {
  * @returns {GoogleAppsScript.URL_Fetch.HTTPResponse} - レスポンス
  */
 export function getPermalink(channel: string, timestamp: string) {
-  const response = getSlack("https://slack.com/api/chat.getPermalink", {
+  return getSlack("https://slack.com/api/chat.getPermalink", {
     channel: channel,
     message_ts: timestamp,
   });
-  return response;
+}
+
+/**
+ * チャンネルに参加しているユーザーを取得する
+ * @param {string} channelId - チャンネルID
+ */
+export function getConversationsMembers(channelId: string) {
+  return getSlack("https://slack.com/api/conversations.members", {
+    channel: channelId,
+  });
+}
+
+/**
+ * チャンネルに参加する
+ * @param {string} channelId - チャンネルID
+ */
+export function postJoinChannel(channelId: string) {
+  return postSlack("https://slack.com/api/conversations.join", {
+    channel: channelId,
+  });
+}
+
+/**
+ * スレッドにメッセージを投稿する
+ * @param {string} thread_ts - スレッドのタイムスタンプ
+ * @param {string} message - 投稿するメッセージ
+ */
+export function postMessageToThread(channelId: string, thread_ts: string, message: string) {
+  try {
+    postSlack("https://slack.com/api/chat.postMessage", {
+      channel: channelId,
+      text: message,
+      thread_ts: thread_ts,
+    });
+  } catch (error) {
+    logError({ error: error });
+    throw new Error("Failed to post message to thread");
+  }
 }

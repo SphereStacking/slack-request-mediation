@@ -10,6 +10,7 @@ class ScriptProperties {
   private _DEBUG_CHANNEL_ID: string | null = null;
   private _CURRENT_LOG_LEVEL: string | null = null;
   private _SLACK_VERIFICATION_TOKEN: string | null = null;
+  private _SLACK_BOT_USER_ID: string | null = null;
 
   private constructor() {}
 
@@ -74,6 +75,13 @@ class ScriptProperties {
       this._SLACK_VERIFICATION_TOKEN = this.props.getProperty("SLACK_VERIFICATION_TOKEN") || "";
     }
     return this._SLACK_VERIFICATION_TOKEN;
+  }
+
+  get SLACK_BOT_USER_ID(): string {
+    if (this._SLACK_BOT_USER_ID === null) {
+      this._SLACK_BOT_USER_ID = this.props.getProperty("SLACK_BOT_USER_ID") || "";
+    }
+    return this._SLACK_BOT_USER_ID;
   }
 }
 

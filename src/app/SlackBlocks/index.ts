@@ -40,6 +40,10 @@ export interface TaskDetailBlock {
   requester: string;
   slack_url: string;
 }
+export type TaskActionValue = {
+  task_id: string;
+  type: string;
+};
 
 import { makeNewRequestBlocks } from "./makeNewRequestBlocks";
 import { makeNewTaskDetailBlock } from "./makeNewTaskDetailBlock";

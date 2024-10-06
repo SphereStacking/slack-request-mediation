@@ -1,11 +1,10 @@
 import { BLOCK_ACTION_ID, SLACK_EMOJI } from "@/app/AppConfig";
 import type { Task } from "./index";
+import { logInfo } from "@/Logger";
+import type { TaskActionValue } from "./index";
 
-export function makeAppHomeBlocks(
-  user_id: string,
-  assignTasks: Task[],
-  requestTasks: Task[],
-): any {
+export function makeAppHomeBlocks(user_id: string, assignTasks: Task[], requestTasks: Task[]): any {
+  logInfo("makeAppHomeBlocks");
   const blocks: any[] = [];
   blocks.push({
     type: "header",
@@ -67,7 +66,7 @@ export function makeAppHomeBlocks(
               text: `${SLACK_EMOJI.DETAIL} 依頼を確認する`,
               emoji: true,
             },
-            value: `{"task_id":"${task.id}","type":"detail"}`,
+            value: JSON.stringify(getTaskActionValue(task.id, BLOCK_ACTION_ID.TASK_DETAIL)),
           },
           {
             text: {
@@ -75,7 +74,7 @@ export function makeAppHomeBlocks(
               text: `${SLACK_EMOJI.LGTM} LGTM/承認/OK`,
               emoji: true,
             },
-            value: `{"task_id":"${task.id}","type":"${BLOCK_ACTION_ID.TASK_LGTM}"}`,
+            value: JSON.stringify(getTaskActionValue(task.id, BLOCK_ACTION_ID.TASK_LGTM)),
           },
           {
             text: {
@@ -83,7 +82,7 @@ export function makeAppHomeBlocks(
               text: `${SLACK_EMOJI.ACTIONED} アクション/コメント したよ`,
               emoji: true,
             },
-            value: `{"task_id":"${task.id}","type":"${BLOCK_ACTION_ID.TASK_ACTIONED}"}`,
+            value: JSON.stringify(getTaskActionValue(task.id, BLOCK_ACTION_ID.TASK_ACTIONED)),
           },
         ],
         action_id: BLOCK_ACTION_ID.ASSIGN_OVERFLOW_ACTION,
@@ -118,7 +117,7 @@ export function makeAppHomeBlocks(
               text: `${SLACK_EMOJI.DETAIL} 依頼を確認する`,
               emoji: true,
             },
-            value: `{"task_id":"${task.id}","type":"detail"}`,
+            value: JSON.stringify(getTaskActionValue(task.id, BLOCK_ACTION_ID.TASK_DETAIL)),
           },
           {
             text: {
@@ -126,7 +125,7 @@ export function makeAppHomeBlocks(
               text: `${SLACK_EMOJI.ACTIONED} アクションしたよ`,
               emoji: true,
             },
-            value: `{"task_id":"${task.id}","type":"${BLOCK_ACTION_ID.TASK_ACTIONED}"}`,
+            value: JSON.stringify(getTaskActionValue(task.id, BLOCK_ACTION_ID.TASK_ACTIONED)),
           },
           {
             text: {
@@ -134,7 +133,7 @@ export function makeAppHomeBlocks(
               text: `${SLACK_EMOJI.CLOSED} 依頼完了`,
               emoji: true,
             },
-            value: `{"task_id":"${task.id}","type":"${BLOCK_ACTION_ID.TASK_CLOSED}"}`,
+            value: JSON.stringify(getTaskActionValue(task.id, BLOCK_ACTION_ID.TASK_CLOSED)),
           },
           {
             text: {
@@ -142,7 +141,7 @@ export function makeAppHomeBlocks(
               text: `${SLACK_EMOJI.REMIND} リマインド`,
               emoji: true,
             },
-            value: `{"task_id":"${task.id}","type":"${BLOCK_ACTION_ID.TASK_REMIND}"}`,
+            value: JSON.stringify(getTaskActionValue(task.id, BLOCK_ACTION_ID.TASK_REMIND)),
           },
         ],
         action_id: "request-overflow-action",
@@ -150,4 +149,11 @@ export function makeAppHomeBlocks(
     });
   });
   return { blocks: blocks };
+}
+
+function getTaskActionValue(task_id: string, type: string): TaskActionValue {
+  return {
+    task_id: task_id,
+    type: type,
+  };
 }

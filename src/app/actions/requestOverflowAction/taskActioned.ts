@@ -1,0 +1,13 @@
+import { logInfo } from "@/Logger";
+import type { TaskActionValue } from "@/app/SlackBlocks";
+import { taskActionedNotification } from "@/app/service/taskRequest";
+/**
+ * タスクアクションを実行する
+ * @param {any} payload - ペイロード
+ * @param {string} task_id - タスクID
+ */
+export function taskActioned(taskActionValue: TaskActionValue, payload: any): GoogleAppsScript.Content.TextOutput {
+  logInfo("taskActioned");
+  taskActionedNotification(taskActionValue.task_id, payload.user._id);
+  return ContentService.createTextOutput("hoge");
+}

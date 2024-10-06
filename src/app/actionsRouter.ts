@@ -4,14 +4,11 @@ import {
   addTask,
   updateHome,
   openTaskRegisterModal,
-  taskDetail,
-  taskActioned,
-  taskClose,
-  taskRemind,
-  taskLgtm,
+  assignOverflowAction,
+  requestOverflowAction,
   urlVerification,
 } from "@/app/actions";
-import { logInfo } from "@/Logger";
+import { logInfo, logDebug, logError } from "@/Logger";
 
 /**
  * アクションルーター
@@ -20,11 +17,10 @@ import { logInfo } from "@/Logger";
  * @returns
  */
 export function actionsRouter(type: string, payload: any) {
-  logInfo({ type, payload });
-
   const callbackRoute = actionRoutes.find((route) => route.key === type);
-
+  logDebug(`callbackRoute ${type}`);
   if (!callbackRoute) {
+    logError(`callback not found : ${type}`);
     return ContentService.createTextOutput("callback not found");
   }
   return callbackRoute.callback(payload);
@@ -38,17 +34,9 @@ const createRoute = (key: string, callback: (payload: any) => GoogleAppsScript.C
 const actionRoutes = [
   createRoute(SLACK_PAYLOAD_TYPE.URL_VERIFICATION, urlVerification),
   createRoute(EVENT_ACTION_ID.APP_HOME_OPENED, getHomeTab),
-  createRoute(BLOCK_ACTION_ID.HOME_SYNC, updateHome),
-  createRoute(BLOCK_ACTION_ID.TASK_REGISTER_MODAL_OPEN, openTaskRegisterModal),
-  createRoute(`${BLOCK_ACTION_ID.ASSIGN_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_DETAIL}`, taskDetail),
-  createRoute(`${BLOCK_ACTION_ID.ASSIGN_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_ACTIONED}`, taskActioned),
-  createRoute(`${BLOCK_ACTION_ID.ASSIGN_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_CLOSED}`, taskClose),
-  createRoute(`${BLOCK_ACTION_ID.ASSIGN_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_REMIND}`, taskRemind),
-  createRoute(`${BLOCK_ACTION_ID.ASSIGN_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_LGTM}`, taskLgtm),
-  createRoute(`${BLOCK_ACTION_ID.REQUEST_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_DETAIL}`, taskDetail),
-  createRoute(`${BLOCK_ACTION_ID.REQUEST_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_ACTIONED}`, taskActioned),
-  createRoute(`${BLOCK_ACTION_ID.REQUEST_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_CLOSED}`, taskClose),
-  createRoute(`${BLOCK_ACTION_ID.REQUEST_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_REMIND}`, taskRemind),
-  createRoute(`${BLOCK_ACTION_ID.REQUEST_OVERFLOW_ACTION}/${BLOCK_ACTION_ID.TASK_LGTM}`, taskLgtm),
-  createRoute(VIEW_SUBMISSION_ACTION_ID.TASK_ADD, addTask),
+  createRoute(`${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.HOME_SYNC}`, updateHome),
+  createRoute(`${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.TASK_REGISTER_MODAL_OPEN}`, openTaskRegisterModal),
+  createRoute(`${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.ASSIGN_OVERFLOW_ACTION}`, assignOverflowAction),
+  createRoute(`${SLACK_PAYLOAD_TYPE.VIEW_SUBMISSION}/${VIEW_SUBMISSION_ACTION_ID.TASK_ADD}`, addTask),
+  createRoute(`${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.REQUEST_OVERFLOW_ACTION}`, requestOverflowAction),
 ];
