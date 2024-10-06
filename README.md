@@ -155,3 +155,10 @@ https://script.google.com/macros/s/[deployId]/exec
 3. 再度ターミナルでnpx clasp pushを実行します。
 
 </details>
+
+<details>
+<summary>GASでimport exportが使えない</summary>
+
+[[Clasp] Google Apps Script で npm install した package を利用する](https://qiita.com/suzukenz/items/dbe13d5f8884752a37f8)
+
+</details>

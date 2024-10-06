@@ -1,8 +1,14 @@
 {
+  "name": "emsmodules",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "watch": "clasp push --watch",
+    "build": "rollup -c",
+    "watch": "rollup -c -w && clasp push --watch",
     "pull": "clasp pull",
-    "push": "clasp push",
+    "push": "clasp push --force",
     "open": "clasp open",
     "login": "./scripts/login.sh",
     "deploy": "./scripts/deploy.sh",
@@ -10,8 +16,19 @@
     "format": "biome format --write ./src"
   },
   "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.25.4",
+    "@babel/preset-env": "^7.25.4",
+    "@babel/preset-typescript": "^7.24.7",
     "@biomejs/biome": "1.9.2",
     "@google/clasp": "^2.4.2",
-    "@types/google-apps-script": "^1.0.83"
+    "@rollup/plugin-alias": "^5.1.1",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-typescript": "^12.1.0",
+    "@types/google-apps-script": "^1.0.83",
+    "rollup": "^4.22.5"
+  },
+  "dependencies": {
+    "@slack/types": "^2.14.0"
   }
 }
