@@ -27,6 +27,13 @@ export function makeTaskRegisterBlock(): any {
       blocks: [
         {
           type: "section",
+          text: {
+            type: "mrkdwn",
+            text: ":warning:通知まで最大1分の遅延があります:warning:",
+          },
+        },
+        {
+          type: "section",
           block_id: "post_channel",
           text: {
             type: "mrkdwn",

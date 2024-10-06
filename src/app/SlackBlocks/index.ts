@@ -1,10 +1,12 @@
 export interface TaskDetail {
+  id: string;
   summary: string;
   detail: string;
   assignees: string[];
   due_date: string;
   priority: string;
   requester: string;
+  approved_assignees: string[];
 }
 
 export interface RequestBlock {
@@ -47,7 +49,7 @@ export type TaskActionValue = {
 export { makeApprovedToUserBlocks } from "./makeApprovedToUserBlocks";
 export { makeApprovedToThreadBlocks } from "./makeApprovedToThreadBlocks";
 export { makeNewRequestBlocks } from "./makeNewRequestBlocks";
-export { makeNewTaskDetailBlock } from "./makeNewTaskDetailBlock";
+export { makeRequestTaskDetailBlocks } from "./makeRequestTaskDetailBlocks";
 export { makeTaskDetailBlock } from "./makeTaskDetailBlock";
 export { makeTaskListBlocks } from "./makeTaskListBlocks";
 export { makeAppHomeBlocks } from "./makeAppHomeBlocks";
@@ -58,3 +60,4 @@ export { makeActionedToUserBlocks } from "./makeActionedToUserBlocks";
 export { makeActionedToThreadBlocks } from "./makeActionedToThreadBlocks";
 export { makeClosedToUserBlocks } from "./makeClosedToUserBlocks";
 export { makeClosedToThreadBlocks } from "./makeClosedToThreadBlocks";
+export { makeApprovedAllToUserBlocks } from "./makeApprovedAllToUserBlocks";

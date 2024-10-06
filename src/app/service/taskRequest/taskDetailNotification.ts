@@ -13,31 +13,6 @@ export function taskDetailNotification(task_id: string, user_id: string): void {
     logError({ error: "タスクが見つかりません", task_id });
     return;
   }
-  const { channelId, threadTimestamp } = extractChannelIdAndTimestamp(task[0].slack_url);
-  if (!channelId || !threadTimestamp) {
-    logError({ error: "スレッドのタイムスタンプが取得できません", task_id });
-    return;
-  }
-  try {
-    postMessageToThread(
-      channelId,
-      threadTimestamp,
-      makeTaskDetailBlock({
-        id: task[0].id,
-        summary: task[0].summary,
-        detail: task[0].detail,
-        assignees: task[0].assignees,
-        status: task[0].status,
-        due_date: task[0].due_date,
-        priority: task[0].priority,
-        time_left: task[0].time_left,
-        requester: task[0].requester,
-        slack_url: task[0].slack_url,
-      }),
-    );
-  } catch (error) {
-    logError({ error: "スレッドにメッセージを送信できません", task_id });
-  }
   try {
     postDirectMessage(
       user_id,

@@ -10,7 +10,7 @@ import {
   getPermalink,
   postJoinChannel,
 } from "@/Slack/api";
-import { makeNewTaskDetailBlock } from "@/app/SlackBlocks";
+import { makeRequestTaskDetailBlocks } from "@/app/SlackBlocks";
 import { updateSpreadsheetValues } from "@/SpreadSheet";
 /**
  * 新しく追加された依頼を通知する
@@ -42,20 +42,23 @@ export function addTaskNotification(): GoogleAppsScript.Content.TextOutput {
     }
 
     // 投稿先のチャンネル
-    const channelMessage = postChannelMessage(task.post_channel, {
-      blocks: makeNewTaskDetailBlock({
+    const channelMessage = postChannelMessage(
+      task.post_channel,
+      makeRequestTaskDetailBlocks({
+        id: task.id,
         summary: task.summary,
         detail: task.detail,
         assignees: task.assignees,
         due_date: task.due_date,
         priority: task.priority,
         requester: task.requester,
+        approved_assignees: [],
       }),
-    });
+    );
 
     // 依頼元ユーザーに通知
     const response = getPermalink(channelMessage.channel, channelMessage.ts);
-    postDirectMessage(task.requester.value, {
+    postDirectMessage(task.requester, {
       text: `依頼通知が完了しました。\n${response.permalink}`,
     });
 

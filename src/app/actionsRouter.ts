@@ -7,8 +7,9 @@ import {
   assignOverflowAction,
   requestOverflowAction,
   urlVerification,
+  taskClose,
 } from "@/app/actions";
-import { logInfo, logDebug, logError } from "@/Logger";
+import { logError } from "@/Logger";
 
 /**
  * アクションルーター
@@ -33,6 +34,7 @@ const createRoute = (key: string, callback: (payload: any) => GoogleAppsScript.C
 const actionRoutes = [
   createRoute(SLACK_PAYLOAD_TYPE.URL_VERIFICATION, urlVerification),
   createRoute(EVENT_ACTION_ID.APP_HOME_OPENED, getHomeTab),
+  createRoute(`${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.TASK_CLOSED}`, taskClose),
   createRoute(`${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.HOME_SYNC}`, updateHome),
   createRoute(`${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.TASK_REGISTER_MODAL_OPEN}`, openTaskRegisterModal),
   createRoute(`${SLACK_PAYLOAD_TYPE.BLOCK_ACTIONS}/${BLOCK_ACTION_ID.ASSIGN_OVERFLOW_ACTION}`, assignOverflowAction),

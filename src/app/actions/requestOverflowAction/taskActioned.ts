@@ -8,6 +8,6 @@ import { taskActionedNotification } from "@/app/service/taskRequest";
  */
 export function taskActioned(taskActionValue: TaskActionValue, payload: any): GoogleAppsScript.Content.TextOutput {
   logDebug("taskActioned");
-  taskActionedNotification(taskActionValue.task_id, payload.user._id);
+  taskActionedNotification(taskActionValue.task_id, payload.user.id);
   return ContentService.createTextOutput("hoge");
 }

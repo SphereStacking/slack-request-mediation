@@ -2,13 +2,14 @@ import { scriptProperties } from "@/ScriptProperties";
 import { TASK_SPREAD_SHEET_COLUMNS, TASK_STATUS } from "@/app/AppConfig";
 import { formatTaskRows } from "./formatTaskRows";
 import { getFilteredDataWithQuery } from "@/SpreadSheet";
+import type { Task } from "./index";
 
 /**
  * 依頼されたタスクを取得する
  * @param {string} user_id - ユーザーID
  * @returns {Array} 依頼されたタスク
  */
-export function getRequestTask(user_id: string): any[] {
+export function getRequestTask(user_id: string): Task[] {
   return formatTaskRows(
     getFilteredDataWithQuery({
       spreadsheetId: scriptProperties.TASK_SPREADSHEET_ID,

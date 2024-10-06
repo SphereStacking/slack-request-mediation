@@ -8,6 +8,6 @@ import { taskDetailNotification } from "@/app/service/taskRequest";
  */
 export function taskDetail(taskActionValue: TaskActionValue, payload: any): GoogleAppsScript.Content.TextOutput {
   logDebug("taskDetail");
-  taskDetailNotification(taskActionValue.task_id, payload.user._id);
+  taskDetailNotification(taskActionValue.task_id, payload.user.id);
   return ContentService.createTextOutput("hoge");
 }

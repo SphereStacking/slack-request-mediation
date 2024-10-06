@@ -139,12 +139,14 @@ export const BLOCK_ACTION_ID: Record<string, string> = {
 
 /** スラックの絵文字 */
 export const SLACK_EMOJI: Record<string, string> = {
-  LGTM: ":lgtm:",
+  LGTM: ":ok:",
   ACTIONED: ":speech_balloon:",
   REMIND: ":alarm_clock:",
-  CLOSED: ":irai_kanryou:",
+  CLOSED: ":lock:",
   DETAIL: ":clipboard:",
   UNASSIGNED: ":no_entry_sign:",
+  APPROVED_DONE: ":ok_hand:",
+  APPROVED_PENDING: ":spock-hand:",
 };
 
 /** スラックのペイロードタイプ */

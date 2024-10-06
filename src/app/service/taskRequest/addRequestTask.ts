@@ -15,8 +15,6 @@ export function addRequestTask({
   priority,
   requester,
   post_channel,
-  slack_message_url,
-  notification_at,
 }: {
   summary: string;
   detail: string;
@@ -25,30 +23,32 @@ export function addRequestTask({
   priority: string;
   requester: string;
   post_channel: string;
-  slack_message_url: string;
-  notification_at: string;
 }): void {
   try {
+    logError(1);
     const sheet = getSpreadSheet(scriptProperties.TASK_SPREADSHEET_ID, scriptProperties.TASK_SHEET_NAME);
     const lastRow = getLastRow(sheet);
-    const row = [
-      TASK_SPREAD_SHEET_COLUMNS.ID.setFormatRow(Utilities.getUuid()),
-      TASK_SPREAD_SHEET_COLUMNS.SUMMARY.setFormatRow(summary),
-      TASK_SPREAD_SHEET_COLUMNS.DETAIL.setFormatRow(detail),
-      TASK_SPREAD_SHEET_COLUMNS.ASSIGNEES.setFormatRow(assignees.join(",")),
-      TASK_SPREAD_SHEET_COLUMNS.STATUS.setFormatRow(TASK_STATUS.IN_PROGRESS.value),
-      TASK_SPREAD_SHEET_COLUMNS.DUE_DATE.setFormatRow(due_date),
-      TASK_SPREAD_SHEET_COLUMNS.PRIORITY.setFormatRow(priority),
-      TASK_SPREAD_SHEET_COLUMNS.REQUESTER.setFormatRow(requester),
-      TASK_SPREAD_SHEET_COLUMNS.TIME_LEFT.setFormatRow((lastRow + 1).toString()),
-      TASK_SPREAD_SHEET_COLUMNS.POST_CHANNEL.setFormatRow(post_channel),
-      TASK_SPREAD_SHEET_COLUMNS.SLACK_MESSAGE_URL.setFormatRow(slack_message_url),
-      TASK_SPREAD_SHEET_COLUMNS.NOTIFICATION_AT.setFormatRow(notification_at),
-    ];
+    const row = generateRow({
+      ID: Utilities.getUuid(),
+      SUMMARY: summary,
+      DETAIL: detail,
+      ASSIGNEES: assignees.join(","),
+      STATUS: TASK_STATUS.IN_PROGRESS.value,
+      DUE_DATE: due_date,
+      PRIORITY: priority,
+      REQUESTER: requester,
+      TIME_LEFT: (lastRow + 1).toString(),
+      POST_CHANNEL: post_channel,
+      SLACK_MESSAGE_URL: "",
+      NOTIFIED_AT: "",
+      APPROVED_ASSIGNEES: "",
+    });
+    logError(3);
     addRow(sheet, row);
   } catch (error) {
     logError({
-      error: "スプレッドシートにタスクを追加に失敗しました",
+      error,
+      message: "スプレッドシートにタスクを追加に失敗しました",
       summary,
       detail,
       assignees,
@@ -56,7 +56,16 @@ export function addRequestTask({
       priority,
       requester,
       post_channel,
-      slack_message_url,
     });
   }
+}
+
+// 挿入用に行を生成する
+function generateRow(data: { [key: string]: string }): string[] {
+  return Object.keys(TASK_SPREAD_SHEET_COLUMNS)
+    .sort((a, b) => TASK_SPREAD_SHEET_COLUMNS[a].index - TASK_SPREAD_SHEET_COLUMNS[b].index)
+    .map((key) => {
+      const column = TASK_SPREAD_SHEET_COLUMNS[key];
+      return column.setFormatRow(data[key] || "");
+    });
 }

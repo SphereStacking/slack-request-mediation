@@ -51,11 +51,12 @@ export function makeAppHomeBlocks(user_id: string, assignTasks: Task[], requestT
     },
   });
   assignTasks.forEach((task, index) => {
+    const format_summary = task.slack_url ? `<${task.slack_url}|${task.summary}>` : task.summary;
     blocks.push({
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `*${index + 1}* - ${task.due_date} from <@${task.requester}>\n　<${task.slack_url}|${task.summary}>`,
+        text: `*${index + 1}* - ${task.due_date} from <@${task.requester}>\n　${format_summary}`,
       },
       accessory: {
         type: "overflow",
@@ -101,11 +102,12 @@ export function makeAppHomeBlocks(user_id: string, assignTasks: Task[], requestT
   });
 
   requestTasks.forEach((task, index) => {
+    const format_summary = task.slack_url ? `<${task.slack_url}|${task.summary}>` : task.summary;
     blocks.push({
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `*${index + 1}* - ${task.due_date} to  ${task.assignees.map((a: string) => `<@${a}>`).join(", ")} \n　<${task.slack_url}|${task.summary}>`,
+        text: `*${index + 1}* - ${task.due_date} to  ${task.assignees.map((a: string) => `<@${a}>`).join(", ")} \n　${format_summary}`,
       },
       accessory: {
         type: "overflow",
