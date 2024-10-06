@@ -51,8 +51,8 @@ export const TASK_SPREAD_SHEET_COLUMNS: Record<string, TaskSpreadSheetColumn> = 
     column: "C",
     setFormatRow: (value: string): string => value,
   },
-  ASSIGNEE: {
-    title: "assignee",
+  ASSIGNEES: {
+    title: "assignees",
     index: 3,
     column: "D",
     setFormatRow: (value: string): string => value,
@@ -98,6 +98,18 @@ export const TASK_SPREAD_SHEET_COLUMNS: Record<string, TaskSpreadSheetColumn> = 
     title: "slack_message_url",
     index: 10,
     column: "K",
+    setFormatRow: (value: string): string => value,
+  },
+  NOTIFIED_AT: {
+    title: "notified_at",
+    index: 11,
+    column: "L",
+    setFormatRow: (value: string): string => value,
+  },
+  APPROVED_ASSIGNEES: {
+    title: "approved_assignees",
+    index: 12,
+    column: "M",
     setFormatRow: (value: string): string => value,
   },
 };

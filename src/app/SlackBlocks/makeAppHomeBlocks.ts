@@ -1,10 +1,10 @@
 import { BLOCK_ACTION_ID, SLACK_EMOJI } from "@/app/AppConfig";
 import type { Task } from "./index";
-import { logInfo } from "@/Logger";
+import { logDebug } from "@/Logger";
 import type { TaskActionValue } from "./index";
 
 export function makeAppHomeBlocks(user_id: string, assignTasks: Task[], requestTasks: Task[]): any {
-  logInfo("makeAppHomeBlocks");
+  logDebug({ block: "makeAppHomeBlocks", user_id, assignTasks, requestTasks });
   const blocks: any[] = [];
   blocks.push({
     type: "header",
@@ -55,7 +55,7 @@ export function makeAppHomeBlocks(user_id: string, assignTasks: Task[], requestT
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `*${index + 1}* - ${task.due_date} from <@${task.requester}>\n　${task.summary}`,
+        text: `*${index + 1}* - ${task.due_date} from <@${task.requester}>\n　<${task.slack_url}|${task.summary}>`,
       },
       accessory: {
         type: "overflow",
@@ -105,7 +105,7 @@ export function makeAppHomeBlocks(user_id: string, assignTasks: Task[], requestT
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `*${index + 1}* - ${task.due_date} to  ${task.assignee.map((a: string) => `<@${a}>`).join(", ")} \n　${task.summary}`,
+        text: `*${index + 1}* - ${task.due_date} to  ${task.assignees.map((a: string) => `<@${a}>`).join(", ")} \n　<${task.slack_url}|${task.summary}>`,
       },
       accessory: {
         type: "overflow",

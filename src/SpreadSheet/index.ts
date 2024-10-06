@@ -1,9 +1,17 @@
-interface Filter {
+type NullOperatorFilter = {
   column: string;
-  operator?: string;
+  operator: "IS NULL" | "IS NOT NULL";
+  connector?: "AND" | "OR";
+};
+
+type ValueOperatorFilter = {
+  column: string;
+  operator: "=" | "!=" | "LIKE";
   value: string;
-  connector?: string;
-}
+  connector?: "AND" | "OR";
+};
+
+type Filter = NullOperatorFilter | ValueOperatorFilter;
 
 interface QueryParams {
   spreadsheetId: string;
@@ -44,7 +52,7 @@ export function getFilteredDataWithQuery({
   if (!sheet) {
     throw new Error("Sheet is null or undefined");
   }
-  // 行の数がスキップする行数以下の場合、空のデータを返す
+  // 行数がスキップする行数以下の場合、空のデータを返す
   const startRow = skipRows + 1;
   if (sheet.getLastRow() < startRow) {
     return [];
@@ -53,17 +61,22 @@ export function getFilteredDataWithQuery({
   // フィルター条件をQUERY関数の形式に変換
   let query = `SELECT ${selectColumns.join(", ")} WHERE `;
   const conditions = filters.map((filterObj, index) => {
-    const operator = filterObj.operator || "=";
-    let value = filterObj.value;
+    let condition = "";
 
-    // 部分一致の場合、LIKE演算子を使用
-    if (operator.toLowerCase() === "like") {
-      value = `'%${value}%'`;
+    if (isValueOperatorFilter(filterObj)) {
+      let value = filterObj.value;
+      if (filterObj.operator.toLowerCase() === "like") {
+        value = `'%${value}%'`;
+      } else {
+        value = `'${value}'`;
+      }
+      condition = ` ${filterObj.column} ${filterObj.operator} ${value} `;
+    } else if (isNullOperatorFilter(filterObj)) {
+      condition = ` ${filterObj.column} ${filterObj.operator} `;
     } else {
-      value = `'${value}'`;
+      throw new Error("Unsupported filter operator");
     }
 
-    let condition = ` ${filterObj.column} ${operator} ${value} `;
     if (index > 0) {
       condition = ` ${filterObj.connector || "AND"} ${condition}`;
     }
@@ -85,6 +98,10 @@ export function getFilteredDataWithQuery({
     // フィルタリングされたデータを取得
     const filteredData = resultRange.getDataRegion().getValues();
 
+    // #N/Aをチェックして空の配列を返す
+    if (filteredData.length === 0 || (filteredData.length === 1 && filteredData[0][0] === "#N/A")) {
+      return [];
+    }
     return filteredData;
   } catch (error) {
     throw new Error(`getFilteredDataWithQuery error:${error}`);
@@ -94,6 +111,14 @@ export function getFilteredDataWithQuery({
   }
 }
 
+// 型ガード関数
+function isNullOperatorFilter(filter: Filter): filter is NullOperatorFilter {
+  return filter.operator === "IS NULL" || filter.operator === "IS NOT NULL";
+}
+
+function isValueOperatorFilter(filter: Filter): filter is ValueOperatorFilter {
+  return filter.operator === "=" || filter.operator === "!=" || filter.operator === "LIKE";
+}
 /**
  * スプレッドシートを取得する
  * @param {string} spreadsheetId - スプレッドシートのID
@@ -132,16 +157,15 @@ export function addRow(sheet: GoogleAppsScript.Spreadsheet.Sheet, row: string[])
  * @param {string} sheetName - シート名
  * @param {string} searchColumn - 検索する列（例: 'A'）
  * @param {string} searchValue - 検索する値（例: task_id）
- * @param {string} updateColumn - 更新する列（例: 'B'）
- * @param {any} newValue - 新しい値
+ * @param {Array<{ column: string, value: any }>} updates - 更新する列と新しい値の配列
+ * 例: [{ column: 'B', value: 'new_value' }, { column: 'C', value: 'another_value' }]
  */
-export function updateSpreadsheetValue(
+export function updateSpreadsheetValues(
   spreadsheetId: string,
   sheetName: string,
   searchColumn: string,
   searchValue: string,
-  updateColumn: string,
-  newValue: any,
+  updates: { column: string; value: any }[],
 ): void {
   const sheet = SpreadsheetApp.openById(spreadsheetId).getSheetByName(sheetName);
   if (!sheet) {
@@ -149,21 +173,21 @@ export function updateSpreadsheetValue(
   }
 
   const searchColumnIndex = columnToIndex(searchColumn);
-  const updateColumnIndex = columnToIndex(updateColumn);
 
   const dataRange = sheet.getRange(1, 1, sheet.getLastRow(), sheet.getLastColumn());
   const values = dataRange.getValues();
 
-  const updates: { row: number; col: number; value: any }[] = [];
+  const updateIndices = updates.map((update) => ({
+    col: columnToIndex(update.column),
+    value: update.value,
+  }));
 
   for (let i = 0; i < values.length; i++) {
     if (values[i][searchColumnIndex - 1] === searchValue) {
-      updates.push({ row: i + 1, col: updateColumnIndex, value: newValue });
+      for (const update of updateIndices) {
+        sheet.getRange(i + 1, update.col).setValue(update.value);
+      }
     }
-  }
-
-  for (const update of updates) {
-    sheet.getRange(update.row, update.col).setValue(update.value);
   }
 }
 

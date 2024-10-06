@@ -1,13 +1,13 @@
-import { logInfo } from "@/Logger";
+import { logDebug } from "@/Logger";
 import type { TaskActionValue } from "@/app/SlackBlocks";
-import { taskDetailNotification } from "@/app/service/taskRequest";
+import { closeTask } from "@/app/service/taskRequest";
 /**
  * タスククローズを実行する
  * @param {any} payload - ペイロード
  * @param {string} task_id - タスクID
  */
 export function taskClose(taskActionValue: TaskActionValue, payload: any): GoogleAppsScript.Content.TextOutput {
-  logInfo("taskClose");
-  taskDetailNotification(taskActionValue.task_id, payload.user._id);
+  logDebug("taskClose");
+  closeTask(taskActionValue.task_id, payload.user.id);
   return ContentService.createTextOutput("hoge");
 }

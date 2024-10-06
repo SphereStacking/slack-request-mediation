@@ -1,8 +1,10 @@
+import { logDebug } from "@/Logger";
 /**
  * 依頼登録ブロックを作成する
  * @returns {Object} 依頼登録ブロック
  */
 export function makeTaskRegisterBlock(): any {
+  logDebug({ block: "makeTaskRegisterBlock" });
   return {
     view: {
       type: "modal",
@@ -72,10 +74,10 @@ export function makeTaskRegisterBlock(): any {
         },
         {
           type: "section",
-          block_id: "assignee",
+          block_id: "assignees",
           text: {
             type: "mrkdwn",
-            text: "*担当者 assignee*",
+            text: "*担当者 assignees*",
           },
           accessory: {
             type: "multi_users_select",

@@ -1,13 +1,14 @@
 import type { TaskDetail } from "./index";
-
+import { logDebug } from "@/Logger";
 export function makeNewTaskDetailBlock({
   summary,
   detail,
-  assignee,
+  assignees,
   due_date,
   priority,
   requester,
 }: TaskDetail): any[] {
+  logDebug({ block: "makeNewTaskDetailBlock", summary, detail, assignees, due_date, priority, requester });
   return [
     {
       type: "divider",
@@ -38,7 +39,7 @@ export function makeNewTaskDetailBlock({
       fields: [
         {
           type: "mrkdwn",
-          text: `*担当者*　:　${assignee.map((a) => `<@${a}>`).join(", ")}`,
+          text: `*担当者*　:　${assignees.map((a) => `<@${a}>`).join(", ")}`,
         },
       ],
     },

@@ -1,4 +1,4 @@
-import { logInfo, logError } from "@/Logger";
+import { logDebug, logError } from "@/Logger";
 import { BLOCK_ACTION_ID } from "@/app/AppConfig";
 import { taskActioned } from "@/app/actions/requestOverflowAction/taskActioned";
 import { taskClose } from "@/app/actions/requestOverflowAction/taskClose";
@@ -12,7 +12,7 @@ import type { TaskActionValue } from "@/app/SlackBlocks";
  * @returns {GoogleAppsScript.Content.TextOutput} レスポンス
  */
 export function requestOverflowAction(payload: any): GoogleAppsScript.Content.TextOutput {
-  logInfo("assignOverflowAction");
+  logDebug("requestOverflowAction");
   const taskActionValue: TaskActionValue = JSON.parse(payload.actions[0].selected_option.value);
   switch (taskActionValue.type) {
     case BLOCK_ACTION_ID.TASK_DETAIL:

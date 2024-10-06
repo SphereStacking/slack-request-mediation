@@ -1,16 +1,12 @@
 import type { RequestBlock } from "./index";
-
+import { logDebug } from "@/Logger";
 /**
  * 新しい依頼ブロックを作成する
  * @param {RequestBlock} task - 依頼情報
  * @returns {Object} 新しい依頼ブロック
  */
-export function makeNewRequestBlocks({
-  title,
-  dueDate,
-  priority,
-  assignees,
-}: RequestBlock): any {
+export function makeNewRequestBlocks({ title, dueDate, priority, assigneess }: RequestBlock): any {
+  logDebug({ block: "makeNewRequestBlocks", title, dueDate, priority, assigneess });
   return {
     blocks: [
       {
@@ -32,7 +28,7 @@ export function makeNewRequestBlocks({
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `*依頼先:*\n${assignees}`,
+          text: `*依頼先:*\n${assigneess}`,
         },
       },
       {

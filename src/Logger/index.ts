@@ -39,25 +39,16 @@ export function logToSheet(
 
     if (!sheet) {
       sheet = spreadsheet.insertSheet(sheetName);
-      sheet.appendRow([
-        "日時",
-        "ログレベル",
-        "メッセージ",
-        "ファイル名",
-        "行数",
-      ]);
+      sheet.appendRow(["日時", "ログレベル", "メッセージ", "ファイル名", "行数"]);
     }
 
     const stackInfo = getStackInfo(stackDepth);
     const logText = JSON.stringify(logData, null, 2);
     const lastRow = sheet.getLastRow();
     const now = new Date();
-
-    sheet.getRange(lastRow + 1, 1).setValue(now);
-    sheet.getRange(lastRow + 1, 2).setValue(logLevel.name);
-    sheet.getRange(lastRow + 1, 3).setValue(logText);
-    sheet.getRange(lastRow + 1, 4).setValue(stackInfo.fileName);
-    sheet.getRange(lastRow + 1, 5).setValue(stackInfo.lineNumber);
+    sheet
+      .getRange(lastRow + 1, 1, 1, 5)
+      .setValues([[now, logLevel.name, logText, stackInfo.fileName, stackInfo.lineNumber]]);
   } catch (e) {
     Logger.log(`ログの書き込みに失敗しました: ${(e as Error).message}`);
   }
@@ -69,10 +60,7 @@ export function logToSheet(
  * @param {LogLevel} currentLogLevel - 現在のログレベルオブジェクト
  * @returns {boolean} - 記録するべき場合はtrue、そうでない場合はfalse
  */
-export function shouldLog(
-  logLevel: LogLevelType,
-  currentLogLevel: string,
-): boolean {
+export function shouldLog(logLevel: LogLevelType, currentLogLevel: string): boolean {
   return logLevel.value >= LogLevel[currentLogLevel].value ?? 0;
 }
 

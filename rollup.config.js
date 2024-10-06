@@ -39,4 +39,10 @@ export default {
     babel({ extensions, babelHelpers: "runtime" }),
     typescript(),
   ],
+  treeshake: {
+    moduleSideEffects: (id) => {
+      // 特定のディレクトリやファイルを指定
+      return id.includes("addTaskNotification");
+    },
+  },
 };

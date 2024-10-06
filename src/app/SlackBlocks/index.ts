@@ -1,7 +1,7 @@
 export interface TaskDetail {
   summary: string;
   detail: string;
-  assignee: string[];
+  assignees: string[];
   due_date: string;
   priority: string;
   requester: string;
@@ -11,14 +11,14 @@ export interface RequestBlock {
   title: string;
   dueDate: string;
   priority: string;
-  assignees: string;
+  assigneess: string;
 }
 
 export interface Task {
   id: string;
   summary: string;
   detail: string;
-  assignee: string[];
+  assignees: string[];
   status: string;
   due_date: string;
   priority: string;
@@ -32,7 +32,7 @@ export interface TaskDetailBlock {
   id: string;
   summary: string;
   detail: string;
-  assignee: string[];
+  assignees: string[];
   status: string;
   due_date: string;
   priority: string;
@@ -44,19 +44,17 @@ export type TaskActionValue = {
   task_id: string;
   type: string;
 };
-
-import { makeNewRequestBlocks } from "./makeNewRequestBlocks";
-import { makeNewTaskDetailBlock } from "./makeNewTaskDetailBlock";
-import { makeTaskDetailBlock } from "./makeTaskDetailBlock";
-import { makeTaskListBlocks } from "./makeTaskListBlocks";
-import { makeAppHomeBlocks } from "./makeAppHomeBlocks";
-import { makeTaskRegisterBlock } from "./makeTaskRegisterBlock";
-
-export {
-  makeNewRequestBlocks,
-  makeNewTaskDetailBlock,
-  makeTaskDetailBlock,
-  makeTaskListBlocks,
-  makeAppHomeBlocks,
-  makeTaskRegisterBlock,
-};
+export { makeApprovedToUserBlocks } from "./makeApprovedToUserBlocks";
+export { makeApprovedToThreadBlocks } from "./makeApprovedToThreadBlocks";
+export { makeNewRequestBlocks } from "./makeNewRequestBlocks";
+export { makeNewTaskDetailBlock } from "./makeNewTaskDetailBlock";
+export { makeTaskDetailBlock } from "./makeTaskDetailBlock";
+export { makeTaskListBlocks } from "./makeTaskListBlocks";
+export { makeAppHomeBlocks } from "./makeAppHomeBlocks";
+export { makeTaskRegisterBlock } from "./makeTaskRegisterBlock";
+export { makeReminderToUserBlocks } from "./makeReminderToUserBlocks";
+export { makeReminderToThreadBlocks } from "./makeReminderToThreadBlocks";
+export { makeActionedToUserBlocks } from "./makeActionedToUserBlocks";
+export { makeActionedToThreadBlocks } from "./makeActionedToThreadBlocks";
+export { makeClosedToUserBlocks } from "./makeClosedToUserBlocks";
+export { makeClosedToThreadBlocks } from "./makeClosedToThreadBlocks";

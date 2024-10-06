@@ -155,15 +155,35 @@ export function postJoinChannel(channelId: string) {
  * @param {string} thread_ts - スレッドのタイムスタンプ
  * @param {string} message - 投稿するメッセージ
  */
-export function postMessageToThread(channelId: string, thread_ts: string, message: string) {
+export function postMessageToThread(channelId: string, thread_ts: string, message: { text?: string; blocks?: any[] }) {
   try {
     postSlack("https://slack.com/api/chat.postMessage", {
       channel: channelId,
-      text: message,
       thread_ts: thread_ts,
+      ...message,
     });
   } catch (error) {
     logError({ error: error });
     throw new Error("Failed to post message to thread");
+  }
+}
+
+/**
+ * 投稿したメッセージを編集する
+ * @param {string} channelId - チャンネルID
+ * @param {string} timestamp - メッセージのタイムスタンプ
+ * @param {Object} message - 編集するメッセージ内容
+ * @returns {GoogleAppsScript.URL_Fetch.HTTPResponse} - レスポンス
+ */
+export function updateMessage(channelId: string, timestamp: string, message: { text?: string; blocks?: any[] }) {
+  try {
+    return postSlack("https://slack.com/api/chat.update", {
+      channel: channelId,
+      ts: timestamp,
+      ...message,
+    });
+  } catch (error) {
+    logError({ error: error });
+    throw new Error("Failed to update message");
   }
 }

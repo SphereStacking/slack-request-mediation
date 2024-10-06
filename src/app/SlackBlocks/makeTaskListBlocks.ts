@@ -1,16 +1,17 @@
 import type { Task } from "./index";
-
+import { logDebug } from "@/Logger";
 /**
  * @typedef {Object} Task
  * @property {string} id - id
  * @property {string} name - タスク名
- * @property {string} assignee - 担当者
+ * @property {string} assignees - 担当者
  * @property {string} status - ステータス
  * @property {string} dueDate - 期限
  * @property {string} priority - 優先度
  * @property {string} requester - 依頼者
  */
 export function makeTaskListBlocks(tasks: Task[]): any {
+  logDebug({ block: "makeTaskListBlocks", tasks });
   const blocks: any[] = [
     {
       type: "divider",
@@ -63,7 +64,7 @@ export function makeTaskListBlocks(tasks: Task[]): any {
         },
         {
           type: "mrkdwn",
-          text: `*担当者*　:　${task.assignee}`,
+          text: `*担当者*　:　${task.assignees}`,
         },
         {
           type: "mrkdwn",

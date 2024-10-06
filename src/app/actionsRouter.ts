@@ -18,7 +18,6 @@ import { logInfo, logDebug, logError } from "@/Logger";
  */
 export function actionsRouter(type: string, payload: any) {
   const callbackRoute = actionRoutes.find((route) => route.key === type);
-  logDebug(`callbackRoute ${type}`);
   if (!callbackRoute) {
     logError(`callback not found : ${type}`);
     return ContentService.createTextOutput("callback not found");
