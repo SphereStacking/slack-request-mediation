@@ -33,6 +33,15 @@ TaskClipは、Slack上でタスクの依頼を管理し、リマインドを行�
 - [x] アサインしたタスク
 - [ ] ステータスの表示
 
+## 使用技術
+
+- Google Apps Script
+- Google SpreadSheet API
+- Slack API
+- typescript
+- rollup
+- clasp
+
 ## コマンド
 
 > [!NOTE]
