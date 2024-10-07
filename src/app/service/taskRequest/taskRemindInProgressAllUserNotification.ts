@@ -31,7 +31,7 @@ export function taskRemindInProgressAllUserNotification(): void {
     try {
       postDirectMessage(assignee, makeTaskListBlocks(tasks));
     } catch (error) {
-      logError({ error: "ユーザーにメッセージを送信できません", assignee });
+      logError({ message: "ユーザーにメッセージを送信できません", assignee, error });
     }
   }
 }
