@@ -150,6 +150,18 @@ docker exec -it task-clip-app bash
   [src/ScriptProperties.ts](./src/ScriptProperties.ts)の値を設定
   getProperty()の引数に設定したプロパティ名を全て設定
 
+### GASのトリガーの設定
+
+1. 作製したプロジェクトを選択
+2. トリガーを選択
+3. トリガーの設定
+4. トリガーの追加
+
+    | 関数名 | イベントソース | イベントタイプ  | 実行頻度 |
+    | :--- | :--- | :--- | :--- |
+    | taskAddedNotification | 時間主導型 | タイマー | 1分に1回 |
+    | taskRemindInProgressAllUserNotification | 時間主導型 | タイマー | 2時間に1回 |
+
 ### GASをWebアプリケーションとしてデプロイ
 
 GASをWebアプリケーションとしてデプロイしたら
