@@ -131,7 +131,6 @@ docker exec -it task-clip-app bash
   > とりあえずはじめはprodだけでよい。
   > 運用開始してからはdevとprodを作成してそれぞれの環境を運用していく。
 
-
 ### slack appの作成
 
 1. [slack apps](https://api.slack.com/apps)を開く
@@ -142,6 +141,14 @@ docker exec -it task-clip-app bash
    3. Jsonのタブをクリック
    4. [slackAppManifest.json](./slackAppManifest.json)の中身をコピーして貼り付け
    5. Createを押下
+
+### GASのスクリプト プロパティの設定
+
+1. 作製したプロジェクトを選択
+2. スクリプトのプロパティを選択
+3. スクリプトのプロパティの値を設定
+  [src/ScriptProperties.ts](./src/ScriptProperties.ts)の値を設定
+  getProperty()の引数に設定したプロパティ名を全て設定
 
 ### GASをWebアプリケーションとしてデプロイ
 

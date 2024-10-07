@@ -34,7 +34,7 @@ export function closeTask(task_id: string, user_id: string): void {
   try {
     updateSpreadsheetValues(
       scriptProperties.TASK_SPREADSHEET_ID,
-      scriptProperties.TASK_SHEET_NAME,
+      scriptProperties.TASK_SPREADSHEET_NAME,
       TASK_SPREAD_SHEET_COLUMNS.ID.column,
       task_id,
       [{ column: TASK_SPREAD_SHEET_COLUMNS.STATUS.column, value: TASK_STATUS.COMPLETED.value }],

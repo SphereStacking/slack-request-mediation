@@ -1,4 +1,4 @@
-import { logInfo } from "@/Logger";
+import { logDebug, logInfo } from "@/Logger";
 import { scriptProperties } from "@/ScriptProperties";
 import { TASK_SPREAD_SHEET_COLUMNS, TASK_STATUS } from "@/app/AppConfig";
 import { formatTaskRows } from "./formatTaskRows";
@@ -16,13 +16,13 @@ import { updateSpreadsheetValues } from "@/SpreadSheet";
  * 新しく追加された依頼を通知する
  * @param {any} payload - ペイロード
  */
-export function addTaskNotification(): GoogleAppsScript.Content.TextOutput {
-  logInfo("addTaskNotification");
+export function taskAddedNotification(): GoogleAppsScript.Content.TextOutput {
+  logDebug("taskAddedNotification");
 
   const tasks = formatTaskRows(
     getFilteredDataWithQuery({
       spreadsheetId: scriptProperties.TASK_SPREADSHEET_ID,
-      sheetName: scriptProperties.TASK_SHEET_NAME,
+      sheetName: scriptProperties.TASK_SPREADSHEET_NAME,
       filters: [
         {
           column: TASK_SPREAD_SHEET_COLUMNS.NOTIFIED_AT.column,
@@ -65,7 +65,7 @@ export function addTaskNotification(): GoogleAppsScript.Content.TextOutput {
     // スプレッドシートの通知済みのフラグを立てる
     updateSpreadsheetValues(
       scriptProperties.TASK_SPREADSHEET_ID,
-      scriptProperties.TASK_SHEET_NAME,
+      scriptProperties.TASK_SPREADSHEET_NAME,
       TASK_SPREAD_SHEET_COLUMNS.ID.column,
       task.id,
       [

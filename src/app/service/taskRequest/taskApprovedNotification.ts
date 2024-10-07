@@ -27,7 +27,7 @@ export function taskApprovedNotification(task_id: string, user_id: string): void
     // スプレッドシートの通知済みのフラグを立てる
     updateSpreadsheetValues(
       scriptProperties.TASK_SPREADSHEET_ID,
-      scriptProperties.TASK_SHEET_NAME,
+      scriptProperties.TASK_SPREADSHEET_NAME,
       TASK_SPREAD_SHEET_COLUMNS.ID.column,
       task_id,
       [{ column: TASK_SPREAD_SHEET_COLUMNS.APPROVED_ASSIGNEES.column, value: new_approved_assignees }],

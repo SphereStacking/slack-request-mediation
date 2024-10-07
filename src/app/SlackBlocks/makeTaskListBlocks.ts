@@ -37,7 +37,7 @@ export function makeTaskListBlocks(tasks: Task[]): any {
         fields: [
           {
             type: "mrkdwn",
-            text: `*管理ID*　　:　${task.id}\n*サマリー*　:　${task.summary}`,
+            text: `*管理ID*　　:　\n${task.id}\n*サマリー*　:　\n${task.summary}`,
           },
         ],
       },
