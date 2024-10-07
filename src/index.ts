@@ -1,8 +1,7 @@
 import { actionsRouter } from "./app/actionsRouter";
 import { verificationToken } from "./app/auth/verificationToken";
 import { logInfo, logError } from "./Logger";
-
-import { addTaskNotification } from "./app/service/taskRequest/addTaskNotification";
+import { taskRemindInProgressAllUserNotification, taskAddedNotification } from "./app/service/taskRequest";
 
 const CONTENT_TYPE_JSON = "application/json";
 const CONTENT_TYPE_FORM = "application/x-www-form-urlencoded";
@@ -48,7 +47,8 @@ function doPost(e: GoogleAppsScript.Events.DoPost) {
 
   // Rollupでbuildしたときに、addTaskNotificationが削除されないようにするためのダミーの使用
   if (false) {
-    addTaskNotification();
+    taskAddedNotification();
+    taskRemindInProgressAllUserNotification();
   }
   return ContentService.createTextOutput("");
 }

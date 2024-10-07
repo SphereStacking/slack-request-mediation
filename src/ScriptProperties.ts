@@ -5,7 +5,7 @@ class ScriptProperties {
   private _SLACK_BOT_USER_OAUTH_TOKEN: string | null = null;
   private _LOGGER_SPREADSHEET_APP_ID: string | null = null;
   private _TASK_SPREADSHEET_ID: string | null = null;
-  private _TASK_SHEET_NAME: string | null = null;
+  private _TASK_SPREADSHEET_NAME: string | null = null;
   private _DEBUG_USER_ID: string | null = null;
   private _DEBUG_CHANNEL_ID: string | null = null;
   private _CURRENT_LOG_LEVEL: string | null = null;
@@ -23,30 +23,30 @@ class ScriptProperties {
 
   get SLACK_BOT_USER_OAUTH_TOKEN(): string {
     if (this._SLACK_BOT_USER_OAUTH_TOKEN === null) {
-      this._SLACK_BOT_USER_OAUTH_TOKEN = this.props.getProperty("SlackBotUserOAuthToken") || "";
+      this._SLACK_BOT_USER_OAUTH_TOKEN = this.props.getProperty("SLACK_BOT_USER_OAUTH_TOKEN") || "";
     }
     return this._SLACK_BOT_USER_OAUTH_TOKEN;
   }
 
   get LOGGER_SPREADSHEET_APP_ID(): string {
     if (this._LOGGER_SPREADSHEET_APP_ID === null) {
-      this._LOGGER_SPREADSHEET_APP_ID = this.props.getProperty("LoggerSpreadsheetAppID") || "";
+      this._LOGGER_SPREADSHEET_APP_ID = this.props.getProperty("LOGGER_SPREADSHEET_APP_ID") || "";
     }
     return this._LOGGER_SPREADSHEET_APP_ID;
   }
 
   get TASK_SPREADSHEET_ID(): string {
     if (this._TASK_SPREADSHEET_ID === null) {
-      this._TASK_SPREADSHEET_ID = this.props.getProperty("TaskSpreadSheetId") || "";
+      this._TASK_SPREADSHEET_ID = this.props.getProperty("TASK_SPREADSHEET_ID") || "";
     }
     return this._TASK_SPREADSHEET_ID;
   }
 
-  get TASK_SHEET_NAME(): string {
-    if (this._TASK_SHEET_NAME === null) {
-      this._TASK_SHEET_NAME = this.props.getProperty("TaskSheetName") || "";
+  get TASK_SPREADSHEET_NAME(): string {
+    if (this._TASK_SPREADSHEET_NAME === null) {
+      this._TASK_SPREADSHEET_NAME = this.props.getProperty("TASK_SPREADSHEET_NAME") || "";
     }
-    return this._TASK_SHEET_NAME;
+    return this._TASK_SPREADSHEET_NAME;
   }
 
   get DEBUG_USER_ID(): string {

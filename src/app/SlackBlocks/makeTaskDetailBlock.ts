@@ -44,7 +44,7 @@ export function makeTaskDetailBlock({
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `*管理ID*　　:　${id}`,
+          text: `*管理ID*　　:　\n${id}`,
         },
       },
       {

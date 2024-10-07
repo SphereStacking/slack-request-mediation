@@ -13,7 +13,7 @@ export function getRequestTask(user_id: string): Task[] {
   return formatTaskRows(
     getFilteredDataWithQuery({
       spreadsheetId: scriptProperties.TASK_SPREADSHEET_ID,
-      sheetName: scriptProperties.TASK_SHEET_NAME,
+      sheetName: scriptProperties.TASK_SPREADSHEET_NAME,
       filters: [
         {
           column: TASK_SPREAD_SHEET_COLUMNS.STATUS.column,

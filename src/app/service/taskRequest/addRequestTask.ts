@@ -25,8 +25,7 @@ export function addRequestTask({
   post_channel: string;
 }): void {
   try {
-    logError(1);
-    const sheet = getSpreadSheet(scriptProperties.TASK_SPREADSHEET_ID, scriptProperties.TASK_SHEET_NAME);
+    const sheet = getSpreadSheet(scriptProperties.TASK_SPREADSHEET_ID, scriptProperties.TASK_SPREADSHEET_NAME);
     const lastRow = getLastRow(sheet);
     const row = generateRow({
       ID: Utilities.getUuid(),
@@ -43,7 +42,6 @@ export function addRequestTask({
       NOTIFIED_AT: "",
       APPROVED_ASSIGNEES: "",
     });
-    logError(3);
     addRow(sheet, row);
   } catch (error) {
     logError({
