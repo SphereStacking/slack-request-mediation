@@ -61,7 +61,7 @@ export function logToSheet(
  * @returns {boolean} - 記録するべき場合はtrue、そうでない場合はfalse
  */
 export function shouldLog(logLevel: LogLevelType, currentLogLevel: string): boolean {
-  return logLevel.value >= LogLevel[currentLogLevel].value ?? 0;
+  return logLevel.value >= (LogLevel[currentLogLevel]?.value || 0);
 }
 
 /**

@@ -56,7 +56,7 @@ export function makeAppHomeBlocks(user_id: string, assignTasks: Task[], requestT
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `*${index + 1}* - ${task.due_date} from <@${task.requester}>\n　${format_summary}`,
+        text: `*${index + 1}* - ${Utilities.formatDate(task.due_date, "JST", "yyyy/MM/dd")} from <@${task.requester}>\n　${format_summary}`,
       },
       accessory: {
         type: "overflow",
@@ -107,7 +107,7 @@ export function makeAppHomeBlocks(user_id: string, assignTasks: Task[], requestT
       type: "section",
       text: {
         type: "mrkdwn",
-        text: `*${index + 1}* - ${task.due_date} to  ${task.assignees.map((a: string) => `<@${a}>`).join(", ")} \n　${format_summary}`,
+        text: `*${index + 1}* - ${Utilities.formatDate(task.due_date, "JST", "yyyy/MM/dd")} to  ${task.assignees.map((a: string) => `<@${a}>`).join(", ")} \n　${format_summary}`,
       },
       accessory: {
         type: "overflow",
@@ -144,6 +144,14 @@ export function makeAppHomeBlocks(user_id: string, assignTasks: Task[], requestT
               emoji: true,
             },
             value: JSON.stringify(getTaskActionValue(task.id, BLOCK_ACTION_ID.TASK_REMIND)),
+          },
+          {
+            text: {
+              type: "plain_text",
+              text: `${SLACK_EMOJI.EDIT} 依頼を編集する`,
+              emoji: true,
+            },
+            value: JSON.stringify(getTaskActionValue(task.id, BLOCK_ACTION_ID.TASK_EDIT)),
           },
         ],
         action_id: "request-overflow-action",

@@ -10,7 +10,7 @@ export function addTask(payload: any): GoogleAppsScript.Content.TextOutput {
   const slackPayloadParser = new SlackPayloadParser(payload.view.state);
   addRequestTask({
     summary: slackPayloadParser.getPlainTextInput("summary").value,
-    detail: slackPayloadParser.getRichTextInput("detail").value,
+    detail: JSON.stringify(slackPayloadParser.getRichTextInput("detail").value),
     assignees: slackPayloadParser.getMultiUsersSelect("assignees").value,
     due_date: slackPayloadParser.getDatepicker("due_date").value,
     priority: slackPayloadParser.getNumberInput("priority").value,

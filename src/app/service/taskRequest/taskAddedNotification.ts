@@ -49,7 +49,7 @@ export function taskAddedNotification(): GoogleAppsScript.Content.TextOutput {
         summary: task.summary,
         detail: task.detail,
         assignees: task.assignees,
-        due_date: task.due_date,
+        due_date: Utilities.formatDate(task.due_date, "JST", "yyyy-MM-dd"),
         priority: task.priority,
         requester: task.requester,
         approved_assignees: [],

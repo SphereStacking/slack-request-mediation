@@ -19,7 +19,7 @@ export type Task = {
   assignees: string[];
   status: string;
   status_emoji: string;
-  due_date: string;
+  due_date: Date;
   priority: string;
   requester: string;
   time_left: string;

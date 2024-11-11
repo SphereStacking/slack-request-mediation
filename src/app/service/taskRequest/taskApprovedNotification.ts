@@ -51,7 +51,7 @@ export function taskApprovedNotification(task_id: string, user_id: string): void
         summary: task[0].summary,
         detail: task[0].detail,
         assignees: task[0].assignees,
-        due_date: task[0].due_date,
+        due_date: Utilities.formatDate(task[0].due_date, "JST", "yyyy-MM-dd"),
         priority: task[0].priority,
         requester: task[0].requester,
         approved_assignees: new_approved_assignees,

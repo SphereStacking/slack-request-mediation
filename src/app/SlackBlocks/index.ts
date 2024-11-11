@@ -3,7 +3,7 @@ export interface TaskDetail {
   summary: string;
   detail: string;
   assignees: string[];
-  due_date: string;
+  due_date: Date;
   priority: string;
   requester: string;
   approved_assignees: string[];
@@ -11,7 +11,7 @@ export interface TaskDetail {
 
 export interface RequestBlock {
   title: string;
-  dueDate: string;
+  dueDate: Date;
   priority: string;
   assigneess: string;
 }
@@ -22,7 +22,7 @@ export interface Task {
   detail: string;
   assignees: string[];
   status: string;
-  due_date: string;
+  due_date: Date;
   priority: string;
   requester: string;
   status_emoji: string;

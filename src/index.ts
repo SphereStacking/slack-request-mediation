@@ -2,10 +2,10 @@ import { actionsRouter } from "./app/actionsRouter";
 import { verificationToken } from "./app/auth/verificationToken";
 import { logInfo, logError } from "./Logger";
 import { taskRemindInProgressAllUserNotification, taskAddedNotification } from "./app/service/taskRequest";
-
 const CONTENT_TYPE_JSON = "application/json";
 const CONTENT_TYPE_FORM = "application/x-www-form-urlencoded";
 const INVALID_REQUEST_MESSAGE = "invalid request";
+import { SLACK_PAYLOAD_TYPE } from "@/app/AppConfig";
 
 function doPost(e: GoogleAppsScript.Events.DoPost) {
   if (!e.postData) return ContentService.createTextOutput(INVALID_REQUEST_MESSAGE);
@@ -21,11 +21,14 @@ function doPost(e: GoogleAppsScript.Events.DoPost) {
     /* block_actionsの際の処理 */
     if (payload) {
       try {
+        const parsedPayload = JSON.parse(e.parameters.payload[0]);
+        if (typeof parsedPayload.challenge !== "undefined") {
+          return handlePayload(SLACK_PAYLOAD_TYPE.URL_VERIFICATION, parsedPayload);
+        }
         /**
          * こちらのaction_idは、
          * モーダルのブロックに関する処理はタイムアウトの制約が厳しいためログの出力を極力しない
          */
-        const parsedPayload = JSON.parse(e.parameters.payload[0]);
         const { actions, view, type } = parsedPayload;
         const route = (actions && actions.length > 0 ? actions[0].action_id : undefined) || view?.callback_id;
         return handlePayload(`${type}/${route}`, parsedPayload);
@@ -55,8 +58,5 @@ function doPost(e: GoogleAppsScript.Events.DoPost) {
 
 function handlePayload(type: string, payload: any) {
   // verificationToken(payload.token);
-  if (typeof payload.challenge !== "undefined") {
-    return ContentService.createTextOutput(payload.challenge);
-  }
   return actionsRouter(type, payload);
 }
