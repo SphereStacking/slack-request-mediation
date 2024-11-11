@@ -26,7 +26,7 @@ export class SlackPayloadParser {
       case "number_input":
         return { type: "number_input", value: action.value || "" };
       case "rich_text_input":
-        return { type: "rich_text_input", value: action.rich_text_value?.elements[0].elements[0].text || "" };
+        return { type: "rich_text_input", value: action.rich_text_value || {} };
       case "multi_users_select":
         return { type: "multi_users_select", value: action.selected_users ?? [] };
       case "datepicker":
@@ -104,7 +104,7 @@ export type NumberInput = {
 
 export type RichTextInput = {
   type: "rich_text_input";
-  value: string;
+  value: Record<string, unknown>;
 };
 
 export type MultiUsersSelect = {
