@@ -36,7 +36,7 @@ export function makeNewRequestBlocks({ title, dueDate, priority, assigneess }: R
         fields: [
           {
             type: "mrkdwn",
-            text: `*期限:*\n${dueDate}`,
+            text: `*期限:*\n${Utilities.formatDate(dueDate, "JST", "yyyy/MM/dd")}`,
           },
           {
             type: "mrkdwn",

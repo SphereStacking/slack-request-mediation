@@ -22,7 +22,7 @@ export function taskDetailNotification(task_id: string, user_id: string): void {
         detail: task[0].detail,
         assignees: task[0].assignees,
         status: task[0].status,
-        due_date: task[0].due_date,
+        due_date: Utilities.formatDate(task[0].due_date, "JST", "yyyy-MM-dd"),
         priority: task[0].priority,
         time_left: task[0].time_left,
         requester: task[0].requester,

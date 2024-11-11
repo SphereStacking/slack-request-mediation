@@ -51,7 +51,7 @@ export function makeRequestTaskDetailBlock({
         fields: [
           {
             type: "mrkdwn",
-            text: `*期限*　　:　${due_date}`,
+            text: `*期限*　　:　${Utilities.formatDate(due_date, "JST", "yyyy/MM/dd")}`,
           },
           {
             type: "mrkdwn",

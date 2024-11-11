@@ -135,6 +135,7 @@ export const BLOCK_ACTION_ID: Record<string, string> = {
   TASK_REMIND: "remind",
   TASK_LGTM: "lgtm",
   TASK_CLOSED: "closed",
+  TASK_EDIT: "edit",
 };
 
 /** スラックの絵文字 */
@@ -147,6 +148,7 @@ export const SLACK_EMOJI: Record<string, string> = {
   UNASSIGNED: ":no_entry_sign:",
   APPROVED_DONE: ":ok_hand:",
   APPROVED_PENDING: ":spock-hand:",
+  EDIT: ":pencil:",
 };
 
 /** スラックのペイロードタイプ */

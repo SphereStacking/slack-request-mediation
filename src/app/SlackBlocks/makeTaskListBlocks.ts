@@ -6,7 +6,7 @@ import { logDebug } from "@/Logger";
  * @property {string} name - タスク名
  * @property {string} assignees - 担当者
  * @property {string} status - ステータス
- * @property {string} dueDate - 期限
+ * @property {Date} dueDate - 期限
  * @property {string} priority - 優先度
  * @property {string} requester - 依頼者
  */
@@ -72,7 +72,7 @@ export function makeTaskListBlocks(tasks: Task[]): any {
         },
         {
           type: "mrkdwn",
-          text: `*期限*　　:　${task.due_date} (${task.time_left})`,
+          text: `*期限*　　:　${Utilities.formatDate(task.due_date, "JST", "yyyy/MM/dd")} (${task.time_left})`,
         },
         {
           type: "mrkdwn",
